@@ -9,6 +9,7 @@ import {
   PackageCheck,
   ShieldCheck,
   CheckCircle2,
+  MessageSquareText,
 } from "lucide-react";
 
 import Navbar from "../components/Navbar";
@@ -39,16 +40,8 @@ const W = "1320px";
 
 /* ============================================================
    REAL PRODUCT IMAGE URLS
-
-   These are REAL PRODUCT PHOTOGRAPHS:
-   drums / bags / cans / jerry cans.
-
-   No generated SVG.
-   No animated illustration.
-   No fake product rendering.
 ============================================================ */
 
-/* Reliable real photograph used as universal fallback */
 const FALLBACK_IMAGE =
   "https://hoachathaiphong.vn/images/attachment/6712isopropyl-alcohol-ipa-han-quoc.jpg";
 
@@ -149,12 +142,6 @@ const IMG_LACQUER_THINNER =
 const IMG_FURNITURE_THINNER =
   "https://www.ironlinkdistributors.com.au/cdn/shop/files/gp_thinner_20L.png?v=1771665577&width=900";
 
-/*
-  Real paint-can photographs.
-  These are kept as separate constants so you can replace
-  them later with your exact supplier/brand photos if needed.
-*/
-
 const IMG_OIL_PAINT =
   "https://5.imimg.com/data5/SELLER/Default/2023/6/313692784/EA/QO/YS/13041960/oil-based-paint-1000x1000.jpg";
 
@@ -169,10 +156,6 @@ const IMG_DECO_PAINT =
 
 /* ============================================================
    IMAGE COMPONENT
-
-   If an external server blocks the image, automatically
-   switches to another REAL product photograph instead of
-   displaying a broken image.
 ============================================================ */
 
 function ProductImage({ src, alt }) {
@@ -197,10 +180,6 @@ function ProductImage({ src, alt }) {
 ============================================================ */
 
 const RAW_PRODUCTS = [
-  /* ==========================================================
-     INDUSTRIAL CHEMICALS
-  ========================================================== */
-
   {
     id: 1,
     name: "Caustic Lye",
@@ -209,7 +188,6 @@ const RAW_PRODUCTS = [
     cas: "1310-73-2 (Liquid)",
     img: IMG_CAUSTIC_LYE,
   },
-
   {
     id: 2,
     name: "Caustic Soda Flakes",
@@ -218,7 +196,6 @@ const RAW_PRODUCTS = [
     cas: "1310-73-2 (Flakes)",
     img: IMG_CAUSTIC_FLAKES,
   },
-
   {
     id: 3,
     name: "Soda Ash",
@@ -227,7 +204,6 @@ const RAW_PRODUCTS = [
     cas: "497-19-8",
     img: IMG_SODA_ASH,
   },
-
   {
     id: 4,
     name: "Sodium Sulfate (Glauber's Salt)",
@@ -236,7 +212,6 @@ const RAW_PRODUCTS = [
     cas: "7727-73-3",
     img: IMG_SODIUM_SULFATE,
   },
-
   {
     id: 5,
     name: "Hydrogen Peroxide",
@@ -245,7 +220,6 @@ const RAW_PRODUCTS = [
     cas: "7722-84-1",
     img: IMG_H2O2,
   },
-
   {
     id: 6,
     name: "Hydrochloric Acid (HCl)",
@@ -254,7 +228,6 @@ const RAW_PRODUCTS = [
     cas: "7647-01-0",
     img: IMG_HCL,
   },
-
   {
     id: 7,
     name: "Sulfamic Acid",
@@ -263,7 +236,6 @@ const RAW_PRODUCTS = [
     cas: "5329-14-6",
     img: IMG_SULFAMIC,
   },
-
   {
     id: 8,
     name: "Sulfuric Acid",
@@ -273,9 +245,7 @@ const RAW_PRODUCTS = [
     img: IMG_SULFURIC,
   },
 
-  /* ==========================================================
-     SOLVENTS
-  ========================================================== */
+  /* SOLVENTS */
 
   {
     id: 9,
@@ -285,7 +255,6 @@ const RAW_PRODUCTS = [
     cas: "67-63-0",
     img: IMG_IPA,
   },
-
   {
     id: 10,
     name: "Ethanol / Ethyl Alcohol",
@@ -294,7 +263,6 @@ const RAW_PRODUCTS = [
     cas: "64-17-5",
     img: IMG_ETHANOL,
   },
-
   {
     id: 11,
     name: "Toluene",
@@ -303,7 +271,6 @@ const RAW_PRODUCTS = [
     cas: "108-88-3",
     img: IMG_TOLUENE,
   },
-
   {
     id: 12,
     name: "Liquid Acetone",
@@ -312,7 +279,6 @@ const RAW_PRODUCTS = [
     cas: "67-64-1",
     img: IMG_ACETONE,
   },
-
   {
     id: 13,
     name: "Liquid Butyl / Butyl Acetate",
@@ -321,7 +287,6 @@ const RAW_PRODUCTS = [
     cas: "123-86-4",
     img: IMG_BUTYL_ACETATE,
   },
-
   {
     id: 14,
     name: "Liquid Ethylene Glycol",
@@ -331,9 +296,7 @@ const RAW_PRODUCTS = [
     img: IMG_ETHYLENE_GLYCOL,
   },
 
-  /* ==========================================================
-     ETP TREATMENT CHEMICALS
-  ========================================================== */
+  /* ETP */
 
   {
     id: 15,
@@ -343,7 +306,6 @@ const RAW_PRODUCTS = [
     cas: "1327-41-9",
     img: IMG_PAC_LIQUID,
   },
-
   {
     id: 16,
     name: "PAC Powder (Poly Aluminum Chloride)",
@@ -352,7 +314,6 @@ const RAW_PRODUCTS = [
     cas: "1327-41-9",
     img: IMG_PAC_POWDER,
   },
-
   {
     id: 17,
     name: "Alum (Aluminum Sulfate)",
@@ -361,7 +322,6 @@ const RAW_PRODUCTS = [
     cas: "10043-01-3",
     img: IMG_ALUM,
   },
-
   {
     id: 18,
     name: "Polymer / Polyelectrolyte",
@@ -370,7 +330,6 @@ const RAW_PRODUCTS = [
     cas: "ETP-POLY",
     img: IMG_POLYMER,
   },
-
   {
     id: 19,
     name: "Color Removal Chemical",
@@ -379,7 +338,6 @@ const RAW_PRODUCTS = [
     cas: "ETP-CR",
     img: IMG_COLOR_REMOVAL,
   },
-
   {
     id: 20,
     name: "Hypochlorite / Liquid Chlorine",
@@ -389,9 +347,7 @@ const RAW_PRODUCTS = [
     img: IMG_HYPOCHLORITE,
   },
 
-  /* ==========================================================
-     THINNERS & PAINT LININGS
-  ========================================================== */
+  /* THINNERS & PAINT */
 
   {
     id: 21,
@@ -401,7 +357,6 @@ const RAW_PRODUCTS = [
     cas: "MTO",
     img: IMG_MTO,
   },
-
   {
     id: 22,
     name: "Commercial Turpentine Oil",
@@ -410,7 +365,6 @@ const RAW_PRODUCTS = [
     cas: "Turpentine",
     img: IMG_TURPENTINE,
   },
-
   {
     id: 23,
     name: "NC Thinner (Nitrocellulose)",
@@ -419,7 +373,6 @@ const RAW_PRODUCTS = [
     cas: "NC",
     img: IMG_NC_THINNER,
   },
-
   {
     id: 24,
     name: "Deco Thinner",
@@ -428,7 +381,6 @@ const RAW_PRODUCTS = [
     cas: "Thinner-DECO",
     img: IMG_DECO_THINNER,
   },
-
   {
     id: 25,
     name: "Cleaning Thinner",
@@ -437,7 +389,6 @@ const RAW_PRODUCTS = [
     cas: "Thinner-CL",
     img: IMG_CLEANING_THINNER,
   },
-
   {
     id: 26,
     name: "Lacquer Thinner",
@@ -446,7 +397,6 @@ const RAW_PRODUCTS = [
     cas: "LAC",
     img: IMG_LACQUER_THINNER,
   },
-
   {
     id: 27,
     name: "Furniture & Industrial Thinners",
@@ -455,7 +405,6 @@ const RAW_PRODUCTS = [
     cas: "Thinner-Gen",
     img: IMG_FURNITURE_THINNER,
   },
-
   {
     id: 28,
     name: "Oil-Based Paint",
@@ -464,7 +413,6 @@ const RAW_PRODUCTS = [
     cas: "Paint-Oil",
     img: IMG_OIL_PAINT,
   },
-
   {
     id: 29,
     name: "Melamine Paint",
@@ -473,7 +421,6 @@ const RAW_PRODUCTS = [
     cas: "Melamine",
     img: IMG_MELAMINE,
   },
-
   {
     id: 30,
     name: "Lacquer Paint & Sealer",
@@ -482,7 +429,6 @@ const RAW_PRODUCTS = [
     cas: "Lacquer-Sealer",
     img: IMG_LACQUER_PAINT,
   },
-
   {
     id: 31,
     name: "Deco Paint",
@@ -504,14 +450,12 @@ const ETP_SERVICES = [
     desc: "Comprehensive engineering, hardware installation, and scaling of custom ETP plant environments configured to your exact output load.",
     asset: "Complete Engineering Execution",
   },
-
   {
     id: "s2",
     title: "ETP Waste Water Solutions",
     desc: "Chemical adjustment analysis and customized remediation systems targeting complex discharge compliance issues.",
     asset: "Compliance Resolution Analysis",
   },
-
   {
     id: "s3",
     title: "ETP Management & Expert Providers",
@@ -590,6 +534,10 @@ export default function Products() {
           box-sizing: border-box;
         }
 
+        /* =====================================================
+           CATEGORY BUTTONS
+        ===================================================== */
+
         .cat-tab {
           font-family: ${SANS};
           font-size: 14px;
@@ -614,6 +562,10 @@ export default function Products() {
           color: ${T.white};
           border-color: ${T.ink};
         }
+
+        /* =====================================================
+           VIEW TABS
+        ===================================================== */
 
         .vtb {
           font-family: ${SANS};
@@ -640,6 +592,10 @@ export default function Products() {
           color: ${T.accent};
           border-bottom-color: ${T.accent};
         }
+
+        /* =====================================================
+           PRODUCT CARD
+        ===================================================== */
 
         .prod-card {
           background: ${T.white};
@@ -695,6 +651,10 @@ export default function Products() {
           pointer-events: none;
         }
 
+        /* =====================================================
+           ENQUIRY BUTTON
+        ===================================================== */
+
         .enq-btn {
           width: 100%;
           background: ${T.ivory2};
@@ -720,9 +680,196 @@ export default function Products() {
           border-color: ${T.accent};
         }
 
+        /* =====================================================
+           TOP CUSTOM CHEMICAL MESSAGE
+        ===================================================== */
+
+        .hero-custom-box {
+          margin-top: 24px;
+          padding: 18px 20px;
+          background: ${T.white};
+          border: 1px solid ${T.line};
+          border-radius: 14px;
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+        }
+
+        .hero-custom-icon {
+          width: 40px;
+          height: 40px;
+          min-width: 40px;
+          border-radius: 10px;
+          background: ${T.ivory2};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: ${T.accent};
+        }
+
+        .hero-custom-title {
+          font-size: 13.5px;
+          font-weight: 700;
+          color: ${T.ink};
+          margin-bottom: 4px;
+        }
+
+        .hero-custom-text {
+          font-size: 13px;
+          line-height: 1.55;
+          color: ${T.muted};
+        }
+
+        .hero-custom-button {
+          margin-top: 14px;
+          padding: 13px 18px;
+          border-radius: 11px;
+          border: 1px solid ${T.ink};
+          background: ${T.ink};
+          color: ${T.white};
+          font-family: ${SANS};
+          font-size: 13.5px;
+          font-weight: 600;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          transition: all 200ms ease;
+        }
+
+        .hero-custom-button:hover {
+          background: ${T.accent};
+          border-color: ${T.accent};
+          transform: translateY(-2px);
+        }
+
+        /* =====================================================
+           OTHER CHEMICALS CTA
+        ===================================================== */
+
+        .other-chemicals-section {
+          margin-top: 64px;
+          background: ${T.ink};
+          border-radius: 24px;
+          padding: 52px 56px;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 40px;
+        }
+
+        .other-chemicals-section::before {
+          content: "";
+          position: absolute;
+          width: 420px;
+          height: 420px;
+          border-radius: 50%;
+          background: rgba(197,131,67,0.12);
+          right: -130px;
+          top: -190px;
+          pointer-events: none;
+        }
+
+        .other-chemicals-section::after {
+          content: "";
+          position: absolute;
+          width: 260px;
+          height: 260px;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,0.07);
+          right: 110px;
+          bottom: -170px;
+          pointer-events: none;
+        }
+
+        .other-chemicals-content {
+          position: relative;
+          z-index: 2;
+          max-width: 760px;
+        }
+
+        .other-chemicals-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          font-family: ${MONO};
+          font-size: 10px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: ${T.accent};
+          margin-bottom: 14px;
+        }
+
+        .other-chemicals-label span {
+          width: 22px;
+          height: 1px;
+          background: ${T.accent};
+        }
+
+        .other-chemicals-title {
+          font-family: ${SERIF};
+          font-size: clamp(30px, 4vw, 44px);
+          line-height: 1.1;
+          font-weight: 500;
+          color: ${T.white};
+          margin: 0 0 14px;
+          letter-spacing: -0.02em;
+        }
+
+        .other-chemicals-title em {
+          color: ${T.accent};
+          font-style: italic;
+        }
+
+        .other-chemicals-text {
+          color: rgba(255,255,255,0.68);
+          font-size: 15px;
+          line-height: 1.7;
+          margin: 0;
+          max-width: 720px;
+        }
+
+        .other-chemicals-button {
+          position: relative;
+          z-index: 2;
+          flex-shrink: 0;
+          border: 1px solid ${T.accent};
+          background: ${T.accent};
+          color: ${T.white};
+          padding: 15px 22px;
+          border-radius: 12px;
+          font-family: ${SANS};
+          font-size: 13.5px;
+          font-weight: 600;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          transition: all 220ms ease;
+          white-space: nowrap;
+        }
+
+        .other-chemicals-button:hover {
+          background: ${T.white};
+          color: ${T.ink};
+          border-color: ${T.white};
+          transform: translateY(-2px);
+        }
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
         .search-input::placeholder {
           color: ${T.muted};
         }
+
+        /* =====================================================
+           CATEGORY SCROLL
+        ===================================================== */
 
         .category-scroll {
           scrollbar-width: thin;
@@ -741,6 +888,10 @@ export default function Products() {
           border-radius: 99px;
         }
 
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
         @media (max-width: 900px) {
           .hero-grid {
             grid-template-columns: 1fr !important;
@@ -754,6 +905,16 @@ export default function Products() {
 
           .hero-image {
             height: 330px !important;
+          }
+
+          .other-chemicals-section {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 42px 38px;
+          }
+
+          .other-chemicals-button {
+            width: 100%;
           }
         }
 
@@ -769,6 +930,39 @@ export default function Products() {
 
           .products-grid {
             grid-template-columns: 1fr !important;
+          }
+
+          .hero-custom-box {
+            padding: 16px;
+          }
+
+          .hero-custom-icon {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+          }
+
+          .hero-custom-text {
+            font-size: 12.5px;
+          }
+
+          .hero-custom-button {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .other-chemicals-section {
+            margin-top: 46px;
+            padding: 34px 24px;
+            border-radius: 20px;
+          }
+
+          .other-chemicals-title {
+            font-size: 32px;
+          }
+
+          .other-chemicals-text {
+            font-size: 14px;
           }
         }
 
@@ -813,6 +1007,10 @@ export default function Products() {
               alignItems: "center",
             }}
           >
+            {/* ==================================================
+                HERO LEFT
+            ================================================== */}
+
             <div>
               <div
                 style={{
@@ -874,15 +1072,51 @@ export default function Products() {
                   fontSize: "16.5px",
                   lineHeight: "1.7",
                   color: T.muted,
+                  margin: 0,
                 }}
               >
                 From industrial chemicals and solvents to ETP treatment
-                compounds and premium paints — delivered certified and on
-                time, tailored to your exact requirements.
+                compounds and premium paints — delivered certified and
+                on time, tailored to your exact requirements.
               </p>
+
+              {/* ==================================================
+                  IMPORTANT NEW MESSAGE
+              ================================================== */}
+
+              <div className="hero-custom-box">
+                <div className="hero-custom-icon">
+                  <Boxes size={19} />
+                </div>
+
+                <div>
+                  <div className="hero-custom-title">
+                    Looking for something not listed?
+                  </div>
+
+                  <div className="hero-custom-text">
+                    This catalogue highlights our key products, but our
+                    supply range extends beyond the materials shown here.
+                    Tell us what chemical or raw material you need and
+                    we’ll check availability and sourcing options.
+                  </div>
+                </div>
+              </div>
+
+              <button
+                className="hero-custom-button"
+                onClick={() =>
+                  open("Custom / Other Chemical Requirement")
+                }
+              >
+                Ask About Other Chemicals
+                <ArrowUpRight size={14} />
+              </button>
             </div>
 
-            {/* HERO REAL PHOTO */}
+            {/* ==================================================
+                HERO IMAGE
+            ================================================== */}
 
             <div
               className="hero-image"
@@ -1094,157 +1328,207 @@ export default function Products() {
           }}
         >
           {catalogView === "materials" ? (
-            filtered.length === 0 ? (
-              <div
-                style={{
-                  textAlign: "center",
-                  padding: "80px 0",
-                  border: `1px dashed ${T.line}`,
-                  borderRadius: "20px",
-                  background: T.white,
-                }}
-              >
-                <Boxes
-                  size={40}
+            <>
+              {filtered.length === 0 ? (
+                <div
                   style={{
-                    color: T.muted,
-                    marginBottom: "12px",
-                  }}
-                />
-
-                <h3
-                  style={{
-                    fontFamily: SERIF,
-                    fontSize: "22px",
-                    fontWeight: 600,
+                    textAlign: "center",
+                    padding: "80px 0",
+                    border: `1px dashed ${T.line}`,
+                    borderRadius: "20px",
+                    background: T.white,
                   }}
                 >
-                  No materials match your query
-                </h3>
+                  <Boxes
+                    size={40}
+                    style={{
+                      color: T.muted,
+                      marginBottom: "12px",
+                    }}
+                  />
 
-                <p
-                  style={{
-                    color: T.muted,
-                    fontSize: "14px",
-                    marginTop: "4px",
-                  }}
-                >
-                  Submit an enquiry — we supply all custom industrial
-                  variations.
-                </p>
-              </div>
-            ) : (
-              <div
-                className="products-grid"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns:
-                    "repeat(auto-fill, minmax(290px, 1fr))",
-                  gap: "28px",
-                }}
-              >
-                {filtered.map((p) => (
-                  <div
-                    key={p.id}
-                    className="prod-card"
-                    onClick={() => navigate(`/products/${p.id}`)}
+                  <h3
+                    style={{
+                      fontFamily: SERIF,
+                      fontSize: "22px",
+                      fontWeight: 600,
+                      margin: 0,
+                    }}
                   >
-                    {/* ==================================================
-                        REAL PRODUCT PHOTO
-                    ================================================== */}
+                    No materials match your query
+                  </h3>
 
-                    <div className="prod-image-wrap">
-                      <ProductImage
-                        src={p.img}
-                        alt={`${p.name} industrial product`}
-                      />
+                  <p
+                    style={{
+                      color: T.muted,
+                      fontSize: "14px",
+                      marginTop: "8px",
+                    }}
+                  >
+                    Can't find what you're looking for? Send us your
+                    requirement and we'll check availability.
+                  </p>
 
-                      <div className="image-overlay" />
-
-                      <span
-                        style={{
-                          position: "absolute",
-                          left: "14px",
-                          top: "14px",
-                          background: T.ink,
-                          color: T.white,
-                          fontFamily: MONO,
-                          fontSize: "10px",
-                          padding: "5px 9px",
-                          borderRadius: "4px",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.05em",
-                        }}
-                      >
-                        {p.category}
-                      </span>
-                    </div>
-
-                    {/* ==================================================
-                        PRODUCT INFO
-                    ================================================== */}
-
+                  <button
+                    className="other-chemicals-button"
+                    style={{
+                      marginTop: "24px",
+                    }}
+                    onClick={() =>
+                      open("Custom / Other Chemical Requirement")
+                    }
+                  >
+                    Ask About Another Chemical
+                    <ArrowUpRight size={15} />
+                  </button>
+                </div>
+              ) : (
+                <div
+                  className="products-grid"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(290px, 1fr))",
+                    gap: "28px",
+                  }}
+                >
+                  {filtered.map((p) => (
                     <div
-                      style={{
-                        padding: "24px",
-                        display: "flex",
-                        flexDirection: "column",
-                        flexGrow: 1,
-                      }}
-                      onClick={(e) => e.stopPropagation()}
+                      key={p.id}
+                      className="prod-card"
+                      onClick={() => navigate(`/products/${p.id}`)}
                     >
-                      <span
-                        style={{
-                          fontFamily: MONO,
-                          fontSize: "11px",
-                          color: T.accent,
-                          fontWeight: 500,
-                          marginBottom: "4px",
-                        }}
-                      >
-                        {p.cas}
-                      </span>
+                      {/* PRODUCT IMAGE */}
 
-                      <h3
-                        style={{
-                          fontFamily: SERIF,
-                          fontSize: "22px",
-                          fontWeight: 600,
-                          color: T.ink,
-                          marginBottom: "10px",
-                          cursor: "pointer",
-                          lineHeight: "1.2",
-                        }}
-                        onClick={() =>
-                          navigate(`/products/${p.id}`)
-                        }
-                      >
-                        {p.name}
-                      </h3>
+                      <div className="prod-image-wrap">
+                        <ProductImage
+                          src={p.img}
+                          alt={`${p.name} industrial product`}
+                        />
 
-                      <p
-                        style={{
-                          fontSize: "13.5px",
-                          color: T.muted,
-                          lineHeight: "1.55",
-                          marginBottom: "20px",
-                        }}
-                      >
-                        {p.spec}
-                      </p>
+                        <div className="image-overlay" />
 
-                      <button
-                        className="enq-btn"
-                        onClick={() => open(p.name)}
+                        <span
+                          style={{
+                            position: "absolute",
+                            left: "14px",
+                            top: "14px",
+                            background: T.ink,
+                            color: T.white,
+                            fontFamily: MONO,
+                            fontSize: "10px",
+                            padding: "5px 9px",
+                            borderRadius: "4px",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.05em",
+                          }}
+                        >
+                          {p.category}
+                        </span>
+                      </div>
+
+                      {/* PRODUCT INFO */}
+
+                      <div
+                        style={{
+                          padding: "24px",
+                          display: "flex",
+                          flexDirection: "column",
+                          flexGrow: 1,
+                        }}
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        Submit Requirements
-                        <ArrowUpRight size={14} />
-                      </button>
+                        <span
+                          style={{
+                            fontFamily: MONO,
+                            fontSize: "11px",
+                            color: T.accent,
+                            fontWeight: 500,
+                            marginBottom: "4px",
+                          }}
+                        >
+                          {p.cas}
+                        </span>
+
+                        <h3
+                          style={{
+                            fontFamily: SERIF,
+                            fontSize: "22px",
+                            fontWeight: 600,
+                            color: T.ink,
+                            marginBottom: "10px",
+                            cursor: "pointer",
+                            lineHeight: "1.2",
+                          }}
+                          onClick={() =>
+                            navigate(`/products/${p.id}`)
+                          }
+                        >
+                          {p.name}
+                        </h3>
+
+                        <p
+                          style={{
+                            fontSize: "13.5px",
+                            color: T.muted,
+                            lineHeight: "1.55",
+                            marginBottom: "20px",
+                          }}
+                        >
+                          {p.spec}
+                        </p>
+
+                        <button
+                          className="enq-btn"
+                          onClick={() => open(p.name)}
+                        >
+                          Submit Requirements
+                          <ArrowUpRight size={14} />
+                        </button>
+                      </div>
                     </div>
+                  ))}
+                </div>
+              )}
+
+              {/* ==================================================
+                  LARGE CUSTOM SOURCING CTA
+              ================================================== */}
+
+              <div className="other-chemicals-section">
+                <div className="other-chemicals-content">
+                  <div className="other-chemicals-label">
+                    <span />
+                    Looking for something else?
                   </div>
-                ))}
+
+                  <h2 className="other-chemicals-title">
+                    Don't see your chemical <em>listed?</em>
+                  </h2>
+
+                  <p className="other-chemicals-text">
+                    Our listed products represent only part of our
+                    supply capabilities. We also source and supply
+                    other industrial chemicals, solvents, raw materials
+                    and specialty requirements based on availability.
+                    Tell us what you need — product name, specification,
+                    quantity or application — and our team will check
+                    the requirement for you.
+                  </p>
+                </div>
+
+                <button
+                  className="other-chemicals-button"
+                  onClick={() =>
+                    open("Custom / Other Chemical Requirement")
+                  }
+                >
+                  <MessageSquareText size={17} />
+                  Send Your Requirement
+                  <ArrowUpRight size={15} />
+                </button>
               </div>
-            )
+            </>
           ) : (
             /* ==================================================
                ETP SERVICES
@@ -1393,7 +1677,7 @@ export default function Products() {
                   fontWeight: 500,
                   lineHeight: 1.15,
                   marginBottom: "20px",
-                  color:"black"
+                  color: T.ink,
                 }}
               >
                 Logistics matching your production scale.
@@ -1407,8 +1691,8 @@ export default function Products() {
                   marginBottom: "28px",
                 }}
               >
-                Bulk tankers, precision cans, bottles, or HDPE bags — we
-                pack and dispatch exactly to your specification. All
+                Bulk tankers, precision cans, bottles, or HDPE bags —
+                we pack and dispatch exactly to your specification. All
                 shipments come with GST invoice and batch documentation.
               </p>
 
@@ -1459,58 +1743,99 @@ export default function Products() {
                 gap: "20px",
               }}
             >
-              {[
-                {
-                  Icon: PackageCheck,
-                  title: "Custom Chemical Sourcing",
-                  body: "Don't see your specific requirement? Send us the product name and specification — we source and supply all variations.",
-                },
+              {/* CUSTOM SOURCING */}
 
-                {
-                  Icon: ShieldCheck,
-                  title: "ETP Compliance Assurance",
-                  body: "Our ETP chemicals and experts ensure full regulatory compliance with state pollution control boards.",
-                },
-              ].map(({ Icon, title, body }) => (
-                <div
-                  key={title}
+              <div
+                style={{
+                  background: T.white,
+                  padding: "32px",
+                  borderRadius: "16px",
+                  border: `1px solid ${T.line}`,
+                }}
+              >
+                <PackageCheck
+                  size={26}
                   style={{
-                    background: T.white,
-                    padding: "32px",
-                    borderRadius: "16px",
-                    border: `1px solid ${T.line}`,
+                    color: T.accent,
+                    marginBottom: "14px",
+                  }}
+                />
+
+                <h4
+                  style={{
+                    fontFamily: SERIF,
+                    fontSize: "20px",
+                    fontWeight: 600,
+                    marginBottom: "6px",
                   }}
                 >
-                  <Icon
-                    size={26}
-                    style={{
-                      color: T.accent,
-                      marginBottom: "14px",
-                    }}
-                  />
+                  Custom Chemical Sourcing
+                </h4>
 
-                  <h4
-                    style={{
-                      fontFamily: SERIF,
-                      fontSize: "20px",
-                      fontWeight: 600,
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {title}
-                  </h4>
+                <p
+                  style={{
+                    fontSize: "13.5px",
+                    color: T.muted,
+                    lineHeight: "1.5",
+                    marginBottom: "18px",
+                  }}
+                >
+                  Don't see your specific requirement? Send us the
+                  product name and specification — we source and supply
+                  based on your requirement.
+                </p>
 
-                  <p
-                    style={{
-                      fontSize: "13.5px",
-                      color: T.muted,
-                      lineHeight: "1.5",
-                    }}
-                  >
-                    {body}
-                  </p>
-                </div>
-              ))}
+                <button
+                  className="enq-btn"
+                  onClick={() =>
+                    open("Custom / Other Chemical Requirement")
+                  }
+                >
+                  Ask About a Chemical
+                  <ArrowUpRight size={14} />
+                </button>
+              </div>
+
+              {/* ETP COMPLIANCE */}
+
+              <div
+                style={{
+                  background: T.white,
+                  padding: "32px",
+                  borderRadius: "16px",
+                  border: `1px solid ${T.line}`,
+                }}
+              >
+                <ShieldCheck
+                  size={26}
+                  style={{
+                    color: T.accent,
+                    marginBottom: "14px",
+                  }}
+                />
+
+                <h4
+                  style={{
+                    fontFamily: SERIF,
+                    fontSize: "20px",
+                    fontWeight: 600,
+                    marginBottom: "6px",
+                  }}
+                >
+                  ETP Compliance Assurance
+                </h4>
+
+                <p
+                  style={{
+                    fontSize: "13.5px",
+                    color: T.muted,
+                    lineHeight: "1.5",
+                  }}
+                >
+                  Our ETP chemicals and experts ensure full regulatory
+                  compliance with state pollution control boards.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -1523,6 +1848,10 @@ export default function Products() {
       <Footer />
 
       <WhatsAppButton />
+
+      {/* ======================================================
+          ENQUIRY MODAL
+      ====================================================== */}
 
       <EnquiryModal
         isOpen={modal}
