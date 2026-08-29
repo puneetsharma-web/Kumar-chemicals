@@ -6,6 +6,7 @@ import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Industries from "./pages/Industries";
 import Contact from "./pages/Contact";
+import ETPInd from "./pages/ETPInd";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/industries" element={<Industries />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/ETPInd" element={<ETPInd />} />
 
         {/* Admin */}
 <Route path="/admin/login" element={<AdminLogin />} />

@@ -52,9 +52,9 @@ export default function AdminDashboard() {
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
 
-  // --------------------------------------------------
+  // ======================================================
   // FETCH ENQUIRIES
-  // --------------------------------------------------
+  // ======================================================
 
   const fetchEnquiries = async (showRefresh = false) => {
     try {
@@ -81,6 +81,7 @@ export default function AdminDashboard() {
       setEnquiries(data.enquiries || []);
     } catch (err) {
       console.error("Dashboard fetch error:", err);
+
       setError(
         "Could not connect to the backend. Make sure your backend is running on port 5000."
       );
@@ -94,9 +95,9 @@ export default function AdminDashboard() {
     fetchEnquiries();
   }, []);
 
-  // --------------------------------------------------
+  // ======================================================
   // STATS
-  // --------------------------------------------------
+  // ======================================================
 
   const stats = useMemo(() => {
     const total = enquiries.length;
@@ -121,9 +122,9 @@ export default function AdminDashboard() {
     };
   }, [enquiries]);
 
-  // --------------------------------------------------
+  // ======================================================
   // SEARCH + FILTER
-  // --------------------------------------------------
+  // ======================================================
 
   const filteredEnquiries = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -156,9 +157,9 @@ export default function AdminDashboard() {
     });
   }, [enquiries, search, statusFilter]);
 
-  // --------------------------------------------------
-  // STATUS UPDATE
-  // --------------------------------------------------
+  // ======================================================
+  // UPDATE STATUS
+  // ======================================================
 
   const updateStatus = async (id, newStatus) => {
     try {
@@ -212,9 +213,9 @@ export default function AdminDashboard() {
     }
   };
 
-  // --------------------------------------------------
+  // ======================================================
   // DELETE
-  // --------------------------------------------------
+  // ======================================================
 
   const deleteEnquiry = async (id) => {
     const confirmed = window.confirm(
@@ -250,9 +251,9 @@ export default function AdminDashboard() {
     }
   };
 
-  // --------------------------------------------------
+  // ======================================================
   // DATE
-  // --------------------------------------------------
+  // ======================================================
 
   const formatDate = (date) => {
     if (!date) return "—";
@@ -268,27 +269,25 @@ export default function AdminDashboard() {
     });
   };
 
-  // --------------------------------------------------
+  // ======================================================
   // RENDER
-  // --------------------------------------------------
+  // ======================================================
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: COLORS.bg,
-        color: COLORS.ink,
-        fontFamily:
-          '"DM Sans", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      }}
-    >
+    <div className="admin-page">
       <style>{`
         * {
           box-sizing: border-box;
         }
 
-        body {
+        html,
+        body,
+        #root {
           margin: 0;
+          min-height: 100%;
+        }
+
+        body {
           background: ${COLORS.bg};
         }
 
@@ -302,6 +301,20 @@ export default function AdminDashboard() {
           -webkit-tap-highlight-color: transparent;
         }
 
+        .admin-page {
+          min-height: 100vh;
+          background: ${COLORS.bg};
+          color: ${COLORS.ink};
+          font-family:
+            "DM Sans",
+            Inter,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+        }
+
         .admin-shell {
           width: 100%;
           max-width: 1500px;
@@ -309,11 +322,15 @@ export default function AdminDashboard() {
           padding: 34px 42px 60px;
         }
 
+        /* ==================================================
+           HEADER
+        ================================================== */
+
         .admin-topbar {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 20px;
+          gap: 24px;
           margin-bottom: 42px;
         }
 
@@ -339,6 +356,7 @@ export default function AdminDashboard() {
           margin: 0;
           color: ${COLORS.muted};
           font-size: 15px;
+          line-height: 1.5;
         }
 
         .top-actions {
@@ -351,7 +369,7 @@ export default function AdminDashboard() {
           border: 1px solid ${COLORS.border};
           background: ${COLORS.card};
           color: ${COLORS.text};
-          height: 44px;
+          min-height: 44px;
           padding: 0 16px;
           border-radius: 11px;
           display: inline-flex;
@@ -375,6 +393,10 @@ export default function AdminDashboard() {
           cursor: not-allowed;
           transform: none;
         }
+
+        /* ==================================================
+           STATS
+        ================================================== */
 
         .stats-grid {
           display: grid;
@@ -432,6 +454,10 @@ export default function AdminDashboard() {
           line-height: 1;
         }
 
+        /* ==================================================
+           WORKSPACE
+        ================================================== */
+
         .workspace {
           background: ${COLORS.card};
           border: 1px solid ${COLORS.border};
@@ -447,7 +473,6 @@ export default function AdminDashboard() {
           justify-content: space-between;
           align-items: center;
           gap: 20px;
-          flex-wrap: wrap;
         }
 
         .section-title {
@@ -468,7 +493,6 @@ export default function AdminDashboard() {
           display: flex;
           align-items: center;
           gap: 10px;
-          flex-wrap: wrap;
         }
 
         .search-box {
@@ -490,6 +514,7 @@ export default function AdminDashboard() {
 
         .search-box input {
           width: 100%;
+          min-width: 0;
           border: none;
           outline: none;
           background: transparent;
@@ -528,9 +553,14 @@ export default function AdminDashboard() {
           color: ${COLORS.muted};
         }
 
+        /* ==================================================
+           TABLE
+        ================================================== */
+
         .table-wrap {
           width: 100%;
           overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
         }
 
         table {
@@ -600,6 +630,10 @@ export default function AdminDashboard() {
           color: ${COLORS.muted};
           font-size: 11px;
           margin-top: 4px;
+          max-width: 190px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .location-cell {
@@ -607,6 +641,12 @@ export default function AdminDashboard() {
           align-items: center;
           gap: 6px;
           max-width: 210px;
+        }
+
+        .location-cell span {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .location-cell svg {
@@ -622,6 +662,7 @@ export default function AdminDashboard() {
           font-size: 10px;
           font-weight: 800;
           letter-spacing: 0.05em;
+          white-space: nowrap;
         }
 
         .status-new {
@@ -669,7 +710,12 @@ export default function AdminDashboard() {
           background: ${COLORS.accentSoft};
         }
 
-        .empty-state {
+        /* ==================================================
+           STATES
+        ================================================== */
+
+        .empty-state,
+        .loading-state {
           padding: 70px 20px;
           text-align: center;
         }
@@ -699,8 +745,6 @@ export default function AdminDashboard() {
         }
 
         .loading-state {
-          padding: 70px 20px;
-          text-align: center;
           color: ${COLORS.muted};
         }
 
@@ -717,8 +761,11 @@ export default function AdminDashboard() {
           border: 1px solid #F1CFCC;
         }
 
+        .error-box span {
+          flex: 1;
+        }
+
         .error-box button {
-          margin-left: auto;
           border: none;
           background: transparent;
           color: ${COLORS.red};
@@ -726,7 +773,9 @@ export default function AdminDashboard() {
           cursor: pointer;
         }
 
-        /* MODAL */
+        /* ==================================================
+           MODAL
+        ================================================== */
 
         .modal-overlay {
           position: fixed;
@@ -738,6 +787,7 @@ export default function AdminDashboard() {
           align-items: center;
           justify-content: center;
           padding: 20px;
+          overflow-y: auto;
         }
 
         .detail-modal {
@@ -774,11 +824,13 @@ export default function AdminDashboard() {
           font-family: "Cormorant Garamond", Georgia, serif;
           font-size: 32px;
           font-weight: 600;
+          word-break: break-word;
         }
 
         .modal-close {
           width: 36px;
           height: 36px;
+          flex-shrink: 0;
           border-radius: 50%;
           border: 1px solid ${COLORS.border};
           background: white;
@@ -800,6 +852,7 @@ export default function AdminDashboard() {
         }
 
         .detail-item {
+          min-width: 0;
           border: 1px solid ${COLORS.border};
           border-radius: 12px;
           padding: 14px;
@@ -824,6 +877,7 @@ export default function AdminDashboard() {
 
         .detail-label svg {
           color: ${COLORS.accent};
+          flex-shrink: 0;
         }
 
         .detail-value {
@@ -831,6 +885,7 @@ export default function AdminDashboard() {
           font-size: 14px;
           font-weight: 600;
           word-break: break-word;
+          line-height: 1.5;
         }
 
         .message-box {
@@ -839,6 +894,7 @@ export default function AdminDashboard() {
           line-height: 1.7;
           font-weight: 400;
           white-space: pre-wrap;
+          word-break: break-word;
         }
 
         .modal-footer {
@@ -888,55 +944,22 @@ export default function AdminDashboard() {
           cursor: pointer;
         }
 
-        @media (max-width: 1000px) {
+        /* ==================================================
+           TABLET
+        ================================================== */
+
+        @media (max-width: 1100px) {
+          .admin-shell {
+            padding: 30px 26px 50px;
+          }
+
           .stats-grid {
             grid-template-columns: repeat(2, 1fr);
           }
 
-          .admin-shell {
-            padding: 28px 24px 50px;
-          }
-        }
-
-        @media (max-width: 650px) {
-          .admin-shell {
-            padding: 22px 14px 40px;
-          }
-
-          .admin-topbar {
+          .workspace-header {
             align-items: flex-start;
             flex-direction: column;
-            margin-bottom: 30px;
-          }
-
-          .admin-title {
-            font-size: 38px;
-          }
-
-          .top-actions {
-            width: 100%;
-          }
-
-          .action-btn {
-            flex: 1;
-          }
-
-          .stats-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-          }
-
-          .stat-card {
-            min-height: 125px;
-            padding: 16px;
-          }
-
-          .stat-value {
-            font-size: 26px;
-          }
-
-          .workspace-header {
-            padding: 18px;
           }
 
           .toolbar {
@@ -944,7 +967,111 @@ export default function AdminDashboard() {
           }
 
           .search-box {
+            flex: 1;
+            width: auto;
+          }
+        }
+
+        /* ==================================================
+           MOBILE
+        ================================================== */
+
+        @media (max-width: 650px) {
+          .admin-shell {
+            padding: 20px 12px 35px;
+          }
+
+          .admin-topbar {
+            align-items: stretch;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 26px;
+          }
+
+          .brand {
+            font-size: 11px;
+          }
+
+          .admin-title {
+            font-size: 38px;
+            line-height: 0.98;
+          }
+
+          .admin-subtitle {
+            font-size: 13px;
+            max-width: 340px;
+          }
+
+          .top-actions {
             width: 100%;
+          }
+
+          .action-btn {
+            width: 100%;
+          }
+
+          /* Stats */
+
+          .stats-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+            margin-bottom: 16px;
+          }
+
+          .stat-card {
+            min-height: 118px;
+            padding: 15px;
+            border-radius: 14px;
+          }
+
+          .stat-icon {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 12px;
+          }
+
+          .stat-icon svg {
+            width: 16px;
+            height: 16px;
+          }
+
+          .stat-label {
+            font-size: 9px;
+            letter-spacing: 0.06em;
+          }
+
+          .stat-value {
+            font-size: 25px;
+          }
+
+          /* Workspace */
+
+          .workspace {
+            border-radius: 16px;
+          }
+
+          .workspace-header {
+            padding: 17px 14px;
+            gap: 15px;
+          }
+
+          .section-title {
+            font-size: 25px;
+          }
+
+          .section-count {
+            font-size: 11px;
+          }
+
+          .toolbar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+          }
+
+          .search-box {
+            width: 100%;
+            height: 44px;
           }
 
           .filter-wrap {
@@ -953,21 +1080,126 @@ export default function AdminDashboard() {
 
           .filter-select {
             width: 100%;
+            height: 44px;
+          }
+
+          /* Table stays scrollable instead of breaking layout */
+
+          .table-wrap {
+            overflow-x: auto;
+          }
+
+          table {
+            min-width: 950px;
+          }
+
+          th {
+            padding: 12px 14px;
+          }
+
+          td {
+            padding: 14px;
+          }
+
+          /* Error */
+
+          .error-box {
+            margin: 14px;
+            align-items: flex-start;
+          }
+
+          /* Modal */
+
+          .modal-overlay {
+            align-items: flex-end;
+            padding: 0;
+          }
+
+          .detail-modal {
+            width: 100%;
+            max-width: none;
+            max-height: 94vh;
+            border-radius: 22px 22px 0 0;
+          }
+
+          .modal-header {
+            padding: 20px 17px;
+          }
+
+          .modal-title {
+            font-size: 29px;
+          }
+
+          .modal-body {
+            padding: 17px;
           }
 
           .detail-grid {
             grid-template-columns: 1fr;
+            gap: 9px;
           }
 
           .detail-item.full {
             grid-column: auto;
           }
 
-          .modal-body,
-          .modal-header,
+          .detail-item {
+            padding: 13px;
+          }
+
           .modal-footer {
-            padding-left: 18px;
-            padding-right: 18px;
+            padding: 15px 17px 20px;
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .status-control {
+            width: 100%;
+            justify-content: space-between;
+          }
+
+          .status-control select {
+            flex: 1;
+            max-width: 200px;
+          }
+
+          .delete-btn {
+            width: 100%;
+            justify-content: center;
+            height: 42px;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .admin-shell {
+            padding-left: 9px;
+            padding-right: 9px;
+          }
+
+          .admin-title {
+            font-size: 34px;
+          }
+
+          .stat-card {
+            padding: 13px;
+          }
+
+          .stat-label {
+            font-size: 8px;
+          }
+
+          .stat-value {
+            font-size: 23px;
+          }
+        }
+
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+
+          to {
+            transform: rotate(360deg);
           }
         }
       `}</style>
@@ -980,7 +1212,9 @@ export default function AdminDashboard() {
 
         <header className="admin-topbar">
           <div>
-            <div className="brand">KUMAR CHEMICALS</div>
+            <div className="brand">
+              KUMAR CHEMICALS
+            </div>
 
             <h1 className="admin-title">
               Admin Dashboard
@@ -1006,7 +1240,9 @@ export default function AdminDashboard() {
                 }}
               />
 
-              {refreshing ? "Refreshing..." : "Refresh"}
+              {refreshing
+                ? "Refreshing..."
+                : "Refresh"}
             </button>
           </div>
         </header>
@@ -1016,7 +1252,6 @@ export default function AdminDashboard() {
         ================================================== */}
 
         <section className="stats-grid">
-
           <StatCard
             icon={<Users size={18} />}
             label="Total Enquiries"
@@ -1040,11 +1275,10 @@ export default function AdminDashboard() {
             label="Completed"
             value={stats.completedCount}
           />
-
         </section>
 
         {/* ==================================================
-            ENQUIRIES WORKSPACE
+            WORKSPACE
         ================================================== */}
 
         <section className="workspace">
@@ -1064,8 +1298,6 @@ export default function AdminDashboard() {
 
             <div className="toolbar">
 
-              {/* SEARCH */}
-
               <div className="search-box">
                 <Search size={16} />
 
@@ -1079,10 +1311,7 @@ export default function AdminDashboard() {
                 />
               </div>
 
-              {/* FILTER */}
-
               <div className="filter-wrap">
-
                 <select
                   className="filter-select"
                   value={statusFilter}
@@ -1111,10 +1340,10 @@ export default function AdminDashboard() {
                   className="filter-arrow"
                   size={15}
                 />
-
               </div>
 
             </div>
+
           </div>
 
           {/* ERROR */}
@@ -1141,8 +1370,6 @@ export default function AdminDashboard() {
             </div>
           ) : filteredEnquiries.length === 0 ? (
 
-            /* EMPTY */
-
             <div className="empty-state">
 
               <div className="empty-icon">
@@ -1165,14 +1392,11 @@ export default function AdminDashboard() {
 
           ) : (
 
-            /* TABLE */
-
             <div className="table-wrap">
 
               <table>
 
                 <thead>
-
                   <tr>
                     <th>Customer</th>
                     <th>Company</th>
@@ -1183,7 +1407,6 @@ export default function AdminDashboard() {
                     <th>Date</th>
                     <th>Action</th>
                   </tr>
-
                 </thead>
 
                 <tbody>
@@ -1191,8 +1414,6 @@ export default function AdminDashboard() {
                   {filteredEnquiries.map((item) => (
 
                     <tr key={item.id}>
-
-                      {/* CUSTOMER */}
 
                       <td>
                         <div className="customer-name">
@@ -1203,8 +1424,6 @@ export default function AdminDashboard() {
                           {item.phone || "No phone"}
                         </div>
                       </td>
-
-                      {/* COMPANY */}
 
                       <td>
                         <div className="company-name">
@@ -1218,8 +1437,6 @@ export default function AdminDashboard() {
                         )}
                       </td>
 
-                      {/* PRODUCT */}
-
                       <td>
                         <div className="product-name">
                           {item.product || "—"}
@@ -1232,30 +1449,20 @@ export default function AdminDashboard() {
                         )}
                       </td>
 
-                      {/* QUANTITY */}
-
                       <td>
                         {item.quantity || "—"}
                       </td>
 
-                      {/* LOCATION */}
-
                       <td>
-
                         <div className="location-cell">
-
                           <MapPin size={14} />
 
                           <span>
                             {item.delivery_location ||
                               "Not specified"}
                           </span>
-
                         </div>
-
                       </td>
-
-                      {/* STATUS */}
 
                       <td>
                         <StatusBadge
@@ -1263,18 +1470,11 @@ export default function AdminDashboard() {
                         />
                       </td>
 
-                      {/* DATE */}
-
                       <td>
-                        {formatDate(
-                          item.created_at
-                        )}
+                        {formatDate(item.created_at)}
                       </td>
 
-                      {/* ACTION */}
-
                       <td>
-
                         <div className="row-actions">
 
                           <button
@@ -1288,7 +1488,6 @@ export default function AdminDashboard() {
                           </button>
 
                         </div>
-
                       </td>
 
                     </tr>
@@ -1300,9 +1499,11 @@ export default function AdminDashboard() {
               </table>
 
             </div>
+
           )}
 
         </section>
+
       </div>
 
       {/* ==================================================
@@ -1325,12 +1526,9 @@ export default function AdminDashboard() {
             }
           >
 
-            {/* HEADER */}
-
             <div className="modal-header">
 
               <div>
-
                 <div className="modal-eyebrow">
                   Enquiry #{selectedEnquiry.id}
                 </div>
@@ -1339,21 +1537,18 @@ export default function AdminDashboard() {
                   {selectedEnquiry.name ||
                     "Customer Enquiry"}
                 </h2>
-
               </div>
 
               <button
                 className="modal-close"
                 onClick={() =>
                   setSelectedEnquiry(null)
-              }
+                }
               >
                 <X size={17} />
               </button>
 
             </div>
-
-            {/* BODY */}
 
             <div className="modal-body">
 
@@ -1362,41 +1557,31 @@ export default function AdminDashboard() {
                 <DetailItem
                   icon={<Building2 size={14} />}
                   label="Company"
-                  value={
-                    selectedEnquiry.company
-                  }
+                  value={selectedEnquiry.company}
                 />
 
                 <DetailItem
                   icon={<Phone size={14} />}
                   label="Phone"
-                  value={
-                    selectedEnquiry.phone
-                  }
+                  value={selectedEnquiry.phone}
                 />
 
                 <DetailItem
                   icon={<Mail size={14} />}
                   label="Email"
-                  value={
-                    selectedEnquiry.email
-                  }
+                  value={selectedEnquiry.email}
                 />
 
                 <DetailItem
                   icon={<Package size={14} />}
                   label="Product"
-                  value={
-                    selectedEnquiry.product
-                  }
+                  value={selectedEnquiry.product}
                 />
 
                 <DetailItem
                   icon={<Package size={14} />}
                   label="Quantity"
-                  value={
-                    selectedEnquiry.quantity
-                  }
+                  value={selectedEnquiry.quantity}
                 />
 
                 <DetailItem
@@ -1422,11 +1607,9 @@ export default function AdminDashboard() {
                 <DetailItem
                   icon={<Clock3 size={14} />}
                   label="Submitted"
-                  value={
-                    formatDate(
-                      selectedEnquiry.created_at
-                    )
-                  }
+                  value={formatDate(
+                    selectedEnquiry.created_at
+                  )}
                 />
 
                 <div className="detail-item full">
@@ -1447,15 +1630,11 @@ export default function AdminDashboard() {
 
             </div>
 
-            {/* FOOTER */}
-
             <div className="modal-footer">
 
               <div className="status-control">
 
-                <label>
-                  Status
-                </label>
+                <label>Status</label>
 
                 <select
                   value={
@@ -1473,7 +1652,6 @@ export default function AdminDashboard() {
                     )
                   }
                 >
-
                   <option value="NEW">
                     New
                   </option>
@@ -1485,7 +1663,6 @@ export default function AdminDashboard() {
                   <option value="COMPLETED">
                     Completed
                   </option>
-
                 </select>
 
               </div>
@@ -1507,18 +1684,9 @@ export default function AdminDashboard() {
           </div>
 
         </div>
+
       )}
 
-      <style>{`
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </div>
   );
 }
@@ -1530,7 +1698,6 @@ export default function AdminDashboard() {
 function StatCard({ icon, label, value }) {
   return (
     <div className="stat-card">
-
       <div className="stat-icon">
         {icon}
       </div>
@@ -1542,7 +1709,6 @@ function StatCard({ icon, label, value }) {
       <div className="stat-value">
         {value}
       </div>
-
     </div>
   );
 }
@@ -1600,4 +1766,24 @@ function DetailItem({
 
     </div>
   );
+}
+
+// ======================================================
+// DATE HELPER
+// ======================================================
+
+function formatDate(date) {
+  if (!date) return "—";
+
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return "—";
+  }
+
+  return parsed.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }

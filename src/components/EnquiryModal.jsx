@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   X,
   Send,
@@ -15,10 +15,10 @@ const T = {
   muted: "#7A6E5D",
   white: "#FFFFFF",
   accent: "#C58343",
-  accentLight: "rgba(197, 131, 67, 0.06)",
-  glass: "rgba(255, 255, 255, 0.92)",
-  glassBorder: "rgba(255, 255, 255, 0.8)",
-  line: "rgba(18, 15, 13, 0.1)",
+  accentLight: "rgba(197, 131, 67, 0.08)",
+  glass: "rgba(255, 255, 255, 0.96)",
+  glassBorder: "rgba(255, 255, 255, 0.85)",
+  line: "rgba(18, 15, 13, 0.10)",
   error: "#B42318",
   errorBg: "#FEF3F2",
 };
@@ -26,6 +26,19 @@ const T = {
 const SANS = `"DM Sans", "Inter", sans-serif`;
 const SERIF = `"Cormorant Garamond", "Garamond", "Georgia", serif`;
 const MONO = `"DM Mono", "Courier New", monospace`;
+
+const createInitialForm = (prefillProduct = "") => ({
+  name: "",
+  company: "",
+  phone: "",
+  email: "",
+  enquiry_type: "General Enquiry",
+  product: prefillProduct,
+  quantity: "",
+  delivery_location: "",
+  required_date: "",
+  message: "",
+});
 
 export default function EnquiryModal({
   isOpen,
@@ -36,28 +49,19 @@ export default function EnquiryModal({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const [form, setForm] = useState({
-    name: "",
-    company: "",
-    phone: "",
-    email: "",
-    enquiry_type: "General Enquiry",
-    product: prefillProduct,
-    quantity: "",
-    delivery_location: "",
-    required_date: "",
-    message: "",
-  });
+  const [form, setForm] = useState(() =>
+    createInitialForm(prefillProduct)
+  );
 
-  // Keep product synchronized with the product selected outside the modal
+  // Sync selected product from outside the modal
   useEffect(() => {
-    setForm((currentForm) => ({
-      ...currentForm,
+    setForm((current) => ({
+      ...current,
       product: prefillProduct,
     }));
   }, [prefillProduct]);
 
-  // Reset submission/error state whenever modal closes
+  // Reset modal state whenever it closes
   useEffect(() => {
     if (!isOpen) {
       setSubmitted(false);
@@ -66,62 +70,61 @@ export default function EnquiryModal({
     }
   }, [isOpen]);
 
+  // Prevent background page from scrolling while modal is open
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
   if (!isOpen) {
     return null;
   }
 
-  // ===============================
-  // HANDLE INPUT CHANGE
-  // ===============================
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
-    setForm((currentForm) => ({
-      ...currentForm,
+    setForm((current) => ({
+      ...current,
       [name]: value,
     }));
 
-    // Remove error once user starts correcting the form
     if (error) {
       setError("");
     }
   };
 
-  // ===============================
-  // RESET FORM
-  // ===============================
   const resetForm = () => {
-    setForm({
-      name: "",
-      company: "",
-      phone: "",
-      email: "",
-      enquiry_type: "General Enquiry",
-      product: prefillProduct,
-      quantity: "",
-      delivery_location: "",
-      required_date: "",
-      message: "",
-    });
-
+    setForm(createInitialForm(prefillProduct));
     setSubmitted(false);
     setSubmitting(false);
     setError("");
   };
 
-  // ===============================
-  // CLOSE MODAL
-  // ===============================
   const handleClose = () => {
+    if (submitting) {
+      return;
+    }
+
     resetForm();
     onClose();
   };
 
-  // ===============================
-  // SUBMIT ENQUIRY
-  // ===============================
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleBackdropClick = (event) => {
+    if (event.target === event.currentTarget) {
+      handleClose();
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     if (submitting) {
       return;
@@ -187,7 +190,6 @@ export default function EnquiryModal({
 
       setSubmitted(true);
       setSubmitting(false);
-
     } catch (submitError) {
       console.error(
         "Enquiry submission failed:",
@@ -197,249 +199,522 @@ export default function EnquiryModal({
       setSubmitting(false);
 
       setError(
-        submitError.message ||
+        submitError?.message ||
           "We could not submit your enquiry right now. Please try again."
       );
     }
   };
 
+  const today = new Date()
+    .toISOString()
+    .split("T")[0];
+
   return (
     <div
-      onClick={handleClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(18, 15, 13, 0.4)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "24px",
-        zIndex: 2000,
-        fontFamily: SANS,
-        overflowY: "auto",
-      }}
+      className="enquiry-modal-overlay"
+      onMouseDown={handleBackdropClick}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Request a Quote"
     >
       <style>{`
-        .modal-input {
-          width: 100%;
+        @keyframes enquiry-spin {
+          from {
+            transform: rotate(0deg);
+          }
+
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        .enquiry-modal-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 2000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          background: rgba(18, 15, 13, 0.48);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          overflow-y: auto;
           box-sizing: border-box;
-          padding: 12px 16px;
-          background: ${T.white};
-          border: 1px solid ${T.line};
-          border-radius: 10px;
           font-family: ${SANS};
-          font-size: 14px;
+        }
+
+        .enquiry-modal-container {
+          position: relative;
+          width: 100%;
+          max-width: 620px;
+          max-height: calc(100vh - 48px);
+          overflow-y: auto;
+          box-sizing: border-box;
+          padding: 42px;
+          margin: auto;
+          background: ${T.glass};
+          border: 1px solid ${T.glassBorder};
+          border-radius: 28px;
+          box-shadow:
+            0 30px 80px rgba(18, 15, 13, 0.20),
+            0 8px 30px rgba(18, 15, 13, 0.08);
+          scrollbar-width: thin;
+          scrollbar-color: ${T.accent} transparent;
+        }
+
+        .enquiry-modal-container::-webkit-scrollbar {
+          width: 5px;
+        }
+
+        .enquiry-modal-container::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .enquiry-modal-container::-webkit-scrollbar-thumb {
+          background: ${T.accent};
+          border-radius: 20px;
+        }
+
+        .enquiry-close-button {
+          position: absolute;
+          top: 22px;
+          right: 22px;
+          width: 38px;
+          height: 38px;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          border: 1px solid ${T.line};
+          background: ${T.white};
           color: ${T.ink};
-          outline: none;
-          transition: all 200ms ease;
+          cursor: pointer;
+          transition:
+            transform 200ms ease,
+            background 200ms ease,
+            color 200ms ease;
         }
 
-        .modal-input::placeholder {
-          color: #A69C90;
+        .enquiry-close-button:hover {
+          background: ${T.ink};
+          color: ${T.white};
+          transform: rotate(90deg);
         }
 
-        .modal-input:focus {
-          border-color: ${T.accent};
-          box-shadow: 0 0 0 3px ${T.accentLight};
+        .enquiry-header {
+          margin-bottom: 28px;
+          padding-right: 45px;
         }
 
-        .modal-label {
-          font-family: ${MONO};
-          font-size: 11px;
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
-          color: ${T.muted};
+        .enquiry-eyebrow {
           display: block;
           margin-bottom: 6px;
+          font-family: ${MONO};
+          font-size: 10px;
           font-weight: 500;
+          letter-spacing: 0.16em;
+          line-height: 1.4;
+          text-transform: uppercase;
+          color: ${T.accent};
         }
 
-        .modal-row {
+        .enquiry-title {
+          margin: 0;
+          font-family: ${SERIF};
+          font-size: 36px;
+          font-weight: 500;
+          line-height: 1.05;
+          letter-spacing: -0.025em;
+          color: ${T.ink};
+        }
+
+        .enquiry-description {
+          max-width: 470px;
+          margin: 9px 0 0;
+          font-family: ${SANS};
+          font-size: 13px;
+          line-height: 1.6;
+          color: ${T.muted};
+        }
+
+        .enquiry-form {
+          width: 100%;
+        }
+
+        .enquiry-row {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 16px;
           margin-bottom: 16px;
         }
 
-        .modal-select {
-          appearance: none;
-          -webkit-appearance: none;
+        .enquiry-field {
+          min-width: 0;
+        }
+
+        .enquiry-label {
+          display: block;
+          margin-bottom: 7px;
+          font-family: ${MONO};
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 0.06em;
+          line-height: 1.4;
+          text-transform: uppercase;
+          color: ${T.muted};
+        }
+
+        .enquiry-required {
+          color: ${T.accent};
+        }
+
+        .enquiry-input,
+        .enquiry-select,
+        .enquiry-textarea {
           width: 100%;
           box-sizing: border-box;
-          padding: 12px 16px;
-          background: ${T.white};
           border: 1px solid ${T.line};
           border-radius: 10px;
-          font-family: ${SANS};
-          font-size: 14px;
-          color: ${T.ink};
           outline: none;
-          cursor: pointer;
-          transition: all 200ms ease;
-        }
-
-        .modal-select:focus {
-          border-color: ${T.accent};
-          box-shadow: 0 0 0 3px ${T.accentLight};
-        }
-
-        .modal-submit {
-          width: 100%;
-          padding: 16px;
-          background: ${T.accent};
-          color: ${T.white};
-          border: none;
-          border-radius: 12px;
-          font-size: 14px;
-          font-weight: 600;
+          background: ${T.white};
+          color: ${T.ink};
           font-family: ${SANS};
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 8px;
+          font-size: 14px;
+          line-height: 1.4;
+          transition:
+            border-color 200ms ease,
+            box-shadow 200ms ease,
+            background 200ms ease;
+        }
+
+        .enquiry-input,
+        .enquiry-select {
+          min-height: 46px;
+          padding: 11px 14px;
+        }
+
+        .enquiry-textarea {
+          min-height: 105px;
+          padding: 12px 14px;
+          resize: vertical;
+        }
+
+        .enquiry-input::placeholder,
+        .enquiry-textarea::placeholder {
+          color: #A69C90;
+          opacity: 1;
+        }
+
+        .enquiry-input:focus,
+        .enquiry-select:focus,
+        .enquiry-textarea:focus {
+          border-color: ${T.accent};
+          box-shadow:
+            0 0 0 3px ${T.accentLight};
+        }
+
+        .enquiry-select {
+          appearance: none;
+          -webkit-appearance: none;
           cursor: pointer;
-          transition: all 200ms ease;
+          background-image:
+            linear-gradient(45deg, transparent 50%, ${T.muted} 50%),
+            linear-gradient(135deg, ${T.muted} 50%, transparent 50%);
+          background-position:
+            calc(100% - 18px) 20px,
+            calc(100% - 13px) 20px;
+          background-size:
+            5px 5px,
+            5px 5px;
+          background-repeat: no-repeat;
         }
 
-        .modal-submit:hover:not(:disabled) {
-          transform: translateY(-1px);
-          filter: brightness(0.96);
+        .enquiry-date-wrapper {
+          margin-bottom: 16px;
         }
 
-        .modal-submit:disabled {
-          opacity: 0.65;
-          cursor: not-allowed;
+        .enquiry-message-wrapper {
+          margin-bottom: 20px;
         }
 
-        .modal-error {
+        .enquiry-error {
           display: flex;
           align-items: flex-start;
-          gap: 10px;
+          gap: 9px;
+          box-sizing: border-box;
+          width: 100%;
           margin-bottom: 18px;
           padding: 12px 14px;
-          background: ${T.errorBg};
           border: 1px solid rgba(180, 35, 24, 0.15);
           border-radius: 10px;
+          background: ${T.errorBg};
           color: ${T.error};
+          font-family: ${SANS};
           font-size: 13px;
           line-height: 1.5;
         }
 
-        .modal-error-icon {
+        .enquiry-error-icon {
           flex-shrink: 0;
           margin-top: 1px;
         }
 
-        .modal-required {
-          color: ${T.accent};
+        .enquiry-submit {
+          width: 100%;
+          min-height: 52px;
+          padding: 14px 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          border: none;
+          border-radius: 12px;
+          background: ${T.accent};
+          color: ${T.white};
+          font-family: ${SANS};
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1;
+          cursor: pointer;
+          transition:
+            transform 200ms ease,
+            filter 200ms ease,
+            box-shadow 200ms ease;
         }
 
-        @media (max-width: 580px) {
-          .modal-row {
-            grid-template-columns: 1fr !important;
-            gap: 16px !important;
+        .enquiry-submit:hover:not(:disabled) {
+          transform: translateY(-1px);
+          filter: brightness(0.96);
+          box-shadow:
+            0 10px 24px rgba(197, 131, 67, 0.18);
+        }
+
+        .enquiry-submit:active:not(:disabled) {
+          transform: translateY(0);
+        }
+
+        .enquiry-submit:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+        }
+
+        .enquiry-spinner {
+          animation: enquiry-spin 1s linear infinite;
+        }
+
+        .enquiry-security {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          margin-top: 17px;
+          text-align: center;
+          font-family: ${MONO};
+          font-size: 10px;
+          line-height: 1.4;
+          color: ${T.muted};
+        }
+
+        .enquiry-success {
+          padding: 24px 5px 8px;
+          text-align: center;
+        }
+
+        .enquiry-success-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 18px;
+          color: #4CAF50;
+        }
+
+        .enquiry-success-title {
+          margin: 0;
+          font-family: ${SERIF};
+          font-size: 38px;
+          font-weight: 500;
+          line-height: 1.05;
+          color: ${T.ink};
+        }
+
+        .enquiry-success-text {
+          max-width: 390px;
+          margin: 12px auto 28px;
+          font-family: ${SANS};
+          font-size: 14px;
+          line-height: 1.65;
+          color: ${T.muted};
+        }
+
+        .enquiry-return-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 46px;
+          padding: 0 26px;
+          border: none;
+          border-radius: 999px;
+          background: ${T.ink};
+          color: ${T.white};
+          font-family: ${SANS};
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition:
+            background 200ms ease,
+            transform 200ms ease;
+        }
+
+        .enquiry-return-button:hover {
+          background: ${T.accent};
+          transform: translateY(-1px);
+        }
+
+        @media (max-width: 700px) {
+          .enquiry-modal-overlay {
+            align-items: center;
+            padding: 16px;
+          }
+
+          .enquiry-modal-container {
+            max-height: calc(100vh - 32px);
+            padding: 34px 24px 26px;
+            border-radius: 22px;
+          }
+
+          .enquiry-close-button {
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+          }
+
+          .enquiry-header {
+            padding-right: 38px;
+            margin-bottom: 24px;
+          }
+
+          .enquiry-title {
+            font-size: 32px;
+          }
+
+          .enquiry-row {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
           }
         }
 
-        @media (max-width: 600px) {
-          .modal-container {
-            padding: 30px 22px !important;
-            border-radius: 22px !important;
+        @media (max-width: 480px) {
+          .enquiry-modal-overlay {
+            align-items: flex-start;
+            padding: 10px;
+          }
+
+          .enquiry-modal-container {
+            max-height: calc(100vh - 20px);
+            padding: 30px 18px 22px;
+            border-radius: 18px;
+          }
+
+          .enquiry-close-button {
+            top: 13px;
+            right: 13px;
+            width: 34px;
+            height: 34px;
+          }
+
+          .enquiry-header {
+            padding-right: 35px;
+            margin-bottom: 22px;
+          }
+
+          .enquiry-eyebrow {
+            font-size: 9px;
+          }
+
+          .enquiry-title {
+            font-size: 29px;
+          }
+
+          .enquiry-description {
+            font-size: 12px;
+          }
+
+          .enquiry-input,
+          .enquiry-select,
+          .enquiry-textarea {
+            font-size: 13px;
+          }
+
+          .enquiry-input,
+          .enquiry-select {
+            min-height: 44px;
+          }
+
+          .enquiry-textarea {
+            min-height: 100px;
+          }
+
+          .enquiry-submit {
+            min-height: 50px;
+          }
+
+          .enquiry-security {
+            font-size: 9px;
+          }
+
+          .enquiry-success-title {
+            font-size: 32px;
+          }
+
+          .enquiry-success-text {
+            font-size: 13px;
+          }
+        }
+
+        @media (max-width: 350px) {
+          .enquiry-modal-container {
+            padding-left: 14px;
+            padding-right: 14px;
+          }
+
+          .enquiry-title {
+            font-size: 26px;
           }
         }
       `}</style>
 
       <div
-        className="modal-container"
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: T.glass,
-          border: `1px solid ${T.glassBorder}`,
-          padding: "44px",
-          borderRadius: "28px",
-          width: "100%",
-          maxWidth: "580px",
-          position: "relative",
-          boxShadow:
-            "0 30px 70px rgba(18, 15, 13, 0.15)",
-          margin: "auto",
-        }}
+        className="enquiry-modal-container"
+        onMouseDown={(event) => event.stopPropagation()}
       >
-        {/* ===============================
-            CLOSE BUTTON
-        =============================== */}
-
         <button
           type="button"
+          className="enquiry-close-button"
           onClick={handleClose}
           aria-label="Close enquiry form"
-          style={{
-            position: "absolute",
-            top: "24px",
-            right: "24px",
-            width: "36px",
-            height: "36px",
-            borderRadius: "50%",
-            background: T.white,
-            border: `1px solid ${T.line}`,
-            color: T.ink,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            transition: "all 200ms",
-          }}
+          disabled={submitting}
         >
-          <X size={16} />
+          <X size={17} strokeWidth={1.8} />
         </button>
 
-        {/* ===============================
-            SUCCESS VIEW
-        =============================== */}
-
         {submitted ? (
-          <div
-            style={{
-              textAlign: "center",
-              padding: "20px 0",
-            }}
-          >
-            <div
-              style={{
-                color: "#4CAF50",
-                display: "inline-flex",
-                marginBottom: "20px",
-              }}
-            >
+          <div className="enquiry-success">
+            <div className="enquiry-success-icon">
               <CheckCircle2
-                size={56}
-                strokeWidth={1.5}
+                size={60}
+                strokeWidth={1.4}
               />
             </div>
 
-            <h3
-              style={{
-                fontFamily: SERIF,
-                fontSize: "32px",
-                fontWeight: 500,
-                color: T.ink,
-                marginBottom: "12px",
-              }}
-            >
+            <h2 className="enquiry-success-title">
               Enquiry Received
-            </h3>
+            </h2>
 
-            <p
-              style={{
-                color: T.muted,
-                fontSize: "15px",
-                lineHeight: "1.6",
-                maxWidth: "380px",
-                margin: "0 auto 32px",
-              }}
-            >
+            <p className="enquiry-success-text">
               Thank you for your enquiry. Our team has
               received your requirements and will get in
               touch with you shortly.
@@ -447,76 +722,35 @@ export default function EnquiryModal({
 
             <button
               type="button"
+              className="enquiry-return-button"
               onClick={handleClose}
-              style={{
-                padding: "14px 32px",
-                background: T.ink,
-                color: T.white,
-                border: "none",
-                borderRadius: "999px",
-                fontWeight: 600,
-                fontSize: "14px",
-                cursor: "pointer",
-                fontFamily: SANS,
-              }}
             >
               Return to Website
             </button>
           </div>
         ) : (
           <>
-            {/* ===============================
-                HEADER
-            =============================== */}
-
-            <div style={{ marginBottom: "28px" }}>
-              <span
-                style={{
-                  fontFamily: MONO,
-                  fontSize: "11px",
-                  letterSpacing: "0.15em",
-                  color: T.accent,
-                  textTransform: "uppercase",
-                }}
-              >
-                SECURE PIPELINE ACCESS
+            <div className="enquiry-header">
+              <span className="enquiry-eyebrow">
+                Secure Pipeline Access
               </span>
 
-              <h3
-                style={{
-                  fontFamily: SERIF,
-                  fontSize: "32px",
-                  fontWeight: 500,
-                  color: T.ink,
-                  marginTop: "4px",
-                  marginBottom: "0",
-                }}
-              >
+              <h2 className="enquiry-title">
                 Request a Quote
-              </h3>
+              </h2>
 
-              <p
-                style={{
-                  marginTop: "8px",
-                  marginBottom: 0,
-                  color: T.muted,
-                  fontSize: "13px",
-                  lineHeight: "1.5",
-                }}
-              >
+              <p className="enquiry-description">
                 Tell us what you need and our team will
                 contact you with availability and pricing.
               </p>
             </div>
 
-            {/* ===============================
-                FORM
-            =============================== */}
-
-            <form onSubmit={handleSubmit}>
+            <form
+              className="enquiry-form"
+              onSubmit={handleSubmit}
+            >
               {/* NAME + COMPANY */}
-
-              <div className="modal-row">
+              <div className="enquiry-row">
                 <Field
                   label="Your Name"
                   name="name"
@@ -537,8 +771,7 @@ export default function EnquiryModal({
               </div>
 
               {/* PHONE + EMAIL */}
-
-              <div className="modal-row">
+              <div className="enquiry-row">
                 <Field
                   label="Phone Number"
                   name="phone"
@@ -561,18 +794,21 @@ export default function EnquiryModal({
               </div>
 
               {/* ENQUIRY TYPE + PRODUCT */}
-
-              <div className="modal-row">
-                <div>
-                  <label className="modal-label">
+              <div className="enquiry-row">
+                <div className="enquiry-field">
+                  <label
+                    htmlFor="enquiry_type"
+                    className="enquiry-label"
+                  >
                     Enquiry Type
                   </label>
 
                   <select
+                    id="enquiry_type"
                     name="enquiry_type"
                     value={form.enquiry_type}
                     onChange={handleChange}
-                    className="modal-select"
+                    className="enquiry-select"
                   >
                     <option value="General Enquiry">
                       General Enquiry
@@ -611,8 +847,7 @@ export default function EnquiryModal({
               </div>
 
               {/* QUANTITY + DELIVERY LOCATION */}
-
-              <div className="modal-row">
+              <div className="enquiry-row">
                 <Field
                   label="Required Quantity"
                   name="quantity"
@@ -632,82 +867,70 @@ export default function EnquiryModal({
               </div>
 
               {/* REQUIRED DATE */}
-
-              <div
-                style={{
-                  marginBottom: "16px",
-                }}
-              >
-                <label className="modal-label">
+              <div className="enquiry-date-wrapper">
+                <label
+                  htmlFor="required_date"
+                  className="enquiry-label"
+                >
                   Required Delivery Date
                 </label>
 
                 <input
+                  id="required_date"
                   type="date"
                   name="required_date"
                   value={form.required_date}
                   onChange={handleChange}
-                  className="modal-input"
-                  min={
-                    new Date()
-                      .toISOString()
-                      .split("T")[0]
-                  }
+                  className="enquiry-input"
+                  min={today}
                 />
               </div>
 
               {/* MESSAGE */}
-
-              <div
-                style={{
-                  marginBottom: "20px",
-                }}
-              >
-                <label className="modal-label">
+              <div className="enquiry-message-wrapper">
+                <label
+                  htmlFor="message"
+                  className="enquiry-label"
+                >
                   Additional Requirements
                 </label>
 
                 <textarea
+                  id="message"
                   name="message"
                   value={form.message}
                   onChange={handleChange}
-                  className="modal-input"
+                  className="enquiry-textarea"
                   placeholder="Tell us about delivery requirements, packaging, specifications, deadlines or anything else we should know..."
-                  style={{
-                    minHeight: "90px",
-                    resize: "vertical",
-                  }}
                 />
               </div>
 
               {/* ERROR */}
-
               {error && (
-                <div className="modal-error">
+                <div
+                  className="enquiry-error"
+                  role="alert"
+                >
                   <AlertCircle
                     size={17}
-                    className="modal-error-icon"
+                    className="enquiry-error-icon"
                   />
 
                   <span>{error}</span>
                 </div>
               )}
 
-              {/* SUBMIT BUTTON */}
-
+              {/* SUBMIT */}
               <button
                 type="submit"
-                className="modal-submit"
+                className="enquiry-submit"
                 disabled={submitting}
               >
                 {submitting ? (
                   <>
                     <Loader2
-                      size={16}
-                      style={{
-                        animation:
-                          "spin 1s linear infinite",
-                      }}
+                      size={17}
+                      className="enquiry-spinner"
                     />
 
                     <span>
@@ -716,30 +939,14 @@ export default function EnquiryModal({
                   </>
                 ) : (
                   <>
-                    <span>
-                      Submit Enquiry
-                    </span>
-
-                    <Send size={14} />
+                    <span>Submit Enquiry</span>
+                    <Send size={15} />
                   </>
                 )}
               </button>
 
-              {/* SECURITY MESSAGE */}
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  marginTop: "18px",
-                  color: T.muted,
-                  fontSize: "11px",
-                  fontFamily: MONO,
-                  textAlign: "center",
-                }}
-              >
+              {/* SECURITY */}
+              <div className="enquiry-security">
                 <ShieldCheck
                   size={14}
                   style={{
@@ -760,11 +967,6 @@ export default function EnquiryModal({
   );
 }
 
-
-// ==========================================
-// REUSABLE INPUT FIELD
-// ==========================================
-
 function Field({
   label,
   name,
@@ -774,13 +976,18 @@ function Field({
   type = "text",
   required = false,
 }) {
+  const inputId = `enquiry-${name}`;
+
   return (
-    <div style={{ minWidth: 0 }}>
-      <label className="modal-label">
+    <div className="enquiry-field">
+      <label
+        htmlFor={inputId}
+        className="enquiry-label"
+      >
         {label}
 
         {required && (
-          <span className="modal-required">
+          <span className="enquiry-required">
             {" "}
             *
           </span>
@@ -788,13 +995,25 @@ function Field({
       </label>
 
       <input
+        id={inputId}
         name={name}
         type={type}
         value={value}
         onChange={onChange}
-        className="modal-input"
+        className="enquiry-input"
         placeholder={placeholder}
         required={required}
+        autoComplete={
+          name === "name"
+            ? "name"
+            : name === "company"
+            ? "organization"
+            : name === "phone"
+            ? "tel"
+            : name === "email"
+            ? "email"
+            : "off"
+        }
       />
     </div>
   );

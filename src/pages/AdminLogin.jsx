@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { Lock, Mail, ArrowRight, ShieldCheck } from "lucide-react";
+import {
+  Lock,
+  Mail,
+  ArrowRight,
+  ShieldCheck,
+} from "lucide-react";
 
 const T = {
   ivory: "#F9F7F2",
@@ -33,25 +38,32 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { data, error } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
       if (error) {
         throw error;
       }
 
       if (!data?.user) {
-        throw new Error("Login failed. Please try again.");
+        throw new Error(
+          "Login failed. Please try again."
+        );
       }
 
       navigate("/admin");
     } catch (err) {
-      console.error("Admin login error:", err);
+      console.error(
+        "Admin login error:",
+        err
+      );
 
       setError(
-        err.message || "Unable to login. Please check your credentials."
+        err.message ||
+          "Unable to login. Please check your credentials."
       );
     } finally {
       setLoading(false);
@@ -59,21 +71,138 @@ export default function AdminLogin() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: T.ivory,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "24px",
-        fontFamily: SANS,
-      }}
-    >
+    <div className="admin-login-page">
+
       <style>{`
+
+        * {
+          box-sizing: border-box;
+        }
+
+        html,
+        body,
+        #root {
+          min-height: 100%;
+          margin: 0;
+        }
+
+        body {
+          background: ${T.ivory};
+        }
+
+        button,
+        input {
+          font: inherit;
+        }
+
+        .admin-login-page {
+          min-height: 100vh;
+          width: 100%;
+          background: ${T.ivory};
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 24px;
+          font-family: ${SANS};
+        }
+
+        .admin-login-card {
+          width: 100%;
+          max-width: 440px;
+          background: ${T.white};
+          border: 1px solid ${T.line};
+          border-radius: 28px;
+          padding: 44px;
+          box-shadow:
+            0 25px 70px
+            rgba(18, 15, 13, 0.10);
+        }
+
+        .admin-login-header {
+          text-align: center;
+          margin-bottom: 36px;
+        }
+
+        .admin-login-icon {
+          width: 58px;
+          height: 58px;
+          margin: 0 auto 20px;
+          border-radius: 18px;
+          background: ${T.ink};
+          color: ${T.white};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .admin-login-eyebrow {
+          font-family: ${MONO};
+          font-size: 10px;
+          letter-spacing: 0.16em;
+          color: ${T.accent};
+          text-transform: uppercase;
+          margin-bottom: 8px;
+        }
+
+        .admin-login-title {
+          font-family: ${SERIF};
+          font-size: 38px;
+          line-height: 1;
+          font-weight: 500;
+          color: ${T.ink};
+          margin: 0;
+        }
+
+        .admin-login-subtitle {
+          margin: 10px 0 0;
+          color: ${T.muted};
+          font-size: 14px;
+          line-height: 1.5;
+        }
+
+        .admin-login-error {
+          margin-bottom: 20px;
+          padding: 12px 14px;
+          border-radius: 10px;
+          background: #fff1f0;
+          border: 1px solid #f1c8c5;
+          color: #a33a32;
+          font-size: 13px;
+          line-height: 1.5;
+          word-break: break-word;
+        }
+
+        .admin-login-field {
+          margin-bottom: 18px;
+        }
+
+        .admin-login-label {
+          display: block;
+          font-family: ${MONO};
+          font-size: 10px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: ${T.muted};
+          margin-bottom: 7px;
+        }
+
+        .admin-login-input-wrap {
+          position: relative;
+          width: 100%;
+        }
+
+        .admin-login-input-icon {
+          position: absolute;
+          left: 15px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: ${T.muted};
+          pointer-events: none;
+        }
+
         .admin-login-input {
           width: 100%;
-          box-sizing: border-box;
+          min-height: 48px;
           padding: 14px 16px 14px 44px;
           border: 1px solid ${T.line};
           border-radius: 12px;
@@ -87,11 +216,32 @@ export default function AdminLogin() {
 
         .admin-login-input:focus {
           border-color: ${T.accent};
-          box-shadow: 0 0 0 3px rgba(197, 131, 67, 0.08);
+          box-shadow:
+            0 0 0 3px
+            rgba(197, 131, 67, 0.08);
         }
 
         .admin-login-input::placeholder {
           color: #aaa;
+        }
+
+        .admin-login-button {
+          width: 100%;
+          min-height: 50px;
+          border: none;
+          border-radius: 12px;
+          padding: 15px 18px;
+          background: ${T.ink};
+          color: ${T.white};
+          font-family: ${SANS};
+          font-size: 14px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          cursor: pointer;
+          transition: all 180ms ease;
         }
 
         .admin-login-button:hover {
@@ -99,125 +249,207 @@ export default function AdminLogin() {
           transform: translateY(-1px);
         }
 
+        .admin-login-button:active {
+          transform: translateY(0);
+        }
+
         .admin-login-button:disabled {
           opacity: 0.6;
           cursor: not-allowed;
           transform: none;
         }
+
+        .admin-login-footer {
+          margin-top: 26px;
+          text-align: center;
+          font-family: ${MONO};
+          font-size: 10px;
+          color: ${T.muted};
+          letter-spacing: 0.04em;
+        }
+
+        /* ==================================================
+           TABLET
+        ================================================== */
+
+        @media (max-width: 600px) {
+          .admin-login-page {
+            padding: 18px;
+          }
+
+          .admin-login-card {
+            max-width: 440px;
+            border-radius: 22px;
+            padding: 32px 24px;
+          }
+
+          .admin-login-header {
+            margin-bottom: 30px;
+          }
+
+          .admin-login-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            margin-bottom: 17px;
+          }
+
+          .admin-login-title {
+            font-size: 34px;
+          }
+
+          .admin-login-subtitle {
+            font-size: 13px;
+          }
+        }
+
+        /* ==================================================
+           SMALL MOBILE
+        ================================================== */
+
+        @media (max-width: 420px) {
+          .admin-login-page {
+            padding: 12px;
+            align-items: center;
+          }
+
+          .admin-login-card {
+            border-radius: 20px;
+            padding: 28px 18px;
+          }
+
+          .admin-login-header {
+            margin-bottom: 26px;
+          }
+
+          .admin-login-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+          }
+
+          .admin-login-icon svg {
+            width: 25px;
+            height: 25px;
+          }
+
+          .admin-login-eyebrow {
+            font-size: 9px;
+            letter-spacing: 0.13em;
+          }
+
+          .admin-login-title {
+            font-size: 31px;
+          }
+
+          .admin-login-subtitle {
+            font-size: 12px;
+            margin-top: 8px;
+          }
+
+          .admin-login-field {
+            margin-bottom: 16px;
+          }
+
+          .admin-login-input {
+            min-height: 48px;
+            font-size: 13px;
+          }
+
+          .admin-login-button {
+            min-height: 49px;
+            font-size: 13px;
+          }
+
+          .admin-login-footer {
+            margin-top: 22px;
+            font-size: 9px;
+          }
+        }
+
+        /* ==================================================
+           VERY SMALL PHONES
+        ================================================== */
+
+        @media (max-width: 340px) {
+          .admin-login-page {
+            padding: 8px;
+          }
+
+          .admin-login-card {
+            padding: 25px 15px;
+          }
+
+          .admin-login-title {
+            font-size: 28px;
+          }
+
+          .admin-login-eyebrow {
+            font-size: 8px;
+          }
+        }
+
       `}</style>
 
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "440px",
-          background: T.white,
-          border: `1px solid ${T.line}`,
-          borderRadius: "28px",
-          padding: "44px",
-          boxShadow: "0 25px 70px rgba(18, 15, 13, 0.10)",
-        }}
-      >
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "36px" }}>
-          <div
-            style={{
-              width: "58px",
-              height: "58px",
-              margin: "0 auto 20px",
-              borderRadius: "18px",
-              background: T.ink,
-              color: T.white,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <ShieldCheck size={28} strokeWidth={1.6} />
+      <div className="admin-login-card">
+
+        {/* ==================================================
+            HEADER
+        ================================================== */}
+
+        <div className="admin-login-header">
+
+          <div className="admin-login-icon">
+            <ShieldCheck
+              size={28}
+              strokeWidth={1.6}
+            />
           </div>
 
-          <div
-            style={{
-              fontFamily: MONO,
-              fontSize: "10px",
-              letterSpacing: "0.16em",
-              color: T.accent,
-              textTransform: "uppercase",
-              marginBottom: "8px",
-            }}
-          >
+          <div className="admin-login-eyebrow">
             SECURE ADMIN ACCESS
           </div>
 
-          <h1
-            style={{
-              fontFamily: SERIF,
-              fontSize: "38px",
-              fontWeight: 500,
-              color: T.ink,
-              margin: 0,
-            }}
-          >
+          <h1 className="admin-login-title">
             Kumar Chemicals
           </h1>
 
-          <p
-            style={{
-              margin: "10px 0 0",
-              color: T.muted,
-              fontSize: "14px",
-            }}
-          >
+          <p className="admin-login-subtitle">
             Sign in to your administration panel.
           </p>
+
         </div>
 
-        {/* Error */}
+        {/* ==================================================
+            ERROR
+        ================================================== */}
+
         {error && (
-          <div
-            style={{
-              marginBottom: "20px",
-              padding: "12px 14px",
-              borderRadius: "10px",
-              background: "#fff1f0",
-              border: "1px solid #f1c8c5",
-              color: "#a33a32",
-              fontSize: "13px",
-              lineHeight: "1.5",
-            }}
-          >
+          <div className="admin-login-error">
             {error}
           </div>
         )}
 
-        {/* Form */}
+        {/* ==================================================
+            FORM
+        ================================================== */}
+
         <form onSubmit={handleLogin}>
-          {/* Email */}
-          <div style={{ marginBottom: "18px" }}>
-            <label
-              style={{
-                display: "block",
-                fontFamily: MONO,
-                fontSize: "10px",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: T.muted,
-                marginBottom: "7px",
-              }}
-            >
+
+          {/* EMAIL */}
+
+          <div className="admin-login-field">
+
+            <label className="admin-login-label">
               Admin Email
             </label>
 
-            <div style={{ position: "relative" }}>
+            <div className="admin-login-input-wrap">
+
               <Mail
+                className="admin-login-input-icon"
                 size={17}
-                style={{
-                  position: "absolute",
-                  left: "15px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: T.muted,
-                  pointerEvents: "none",
-                }}
               />
 
               <input
@@ -225,40 +457,35 @@ export default function AdminLogin() {
                 type="email"
                 placeholder="admin@kumarchemicals.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) =>
+                  setEmail(e.target.value)
+                }
                 required
                 autoComplete="email"
               />
+
             </div>
+
           </div>
 
-          {/* Password */}
-          <div style={{ marginBottom: "24px" }}>
-            <label
-              style={{
-                display: "block",
-                fontFamily: MONO,
-                fontSize: "10px",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: T.muted,
-                marginBottom: "7px",
-              }}
-            >
+          {/* PASSWORD */}
+
+          <div
+            className="admin-login-field"
+            style={{
+              marginBottom: "24px",
+            }}
+          >
+
+            <label className="admin-login-label">
               Password
             </label>
 
-            <div style={{ position: "relative" }}>
+            <div className="admin-login-input-wrap">
+
               <Lock
+                className="admin-login-input-icon"
                 size={17}
-                style={{
-                  position: "absolute",
-                  left: "15px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: T.muted,
-                  pointerEvents: "none",
-                }}
               />
 
               <input
@@ -266,56 +493,49 @@ export default function AdminLogin() {
                 type="password"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
                 required
                 autoComplete="current-password"
               />
+
             </div>
+
           </div>
 
-          {/* Login button */}
+          {/* LOGIN */}
+
           <button
             className="admin-login-button"
             type="submit"
             disabled={loading}
-            style={{
-              width: "100%",
-              border: "none",
-              borderRadius: "12px",
-              padding: "15px 18px",
-              background: T.ink,
-              color: T.white,
-              fontFamily: SANS,
-              fontSize: "14px",
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-              cursor: loading ? "not-allowed" : "pointer",
-              transition: "all 180ms ease",
-            }}
           >
-            <span>{loading ? "Authenticating..." : "Enter Dashboard"}</span>
 
-            {!loading && <ArrowRight size={16} />}
+            <span>
+              {loading
+                ? "Authenticating..."
+                : "Enter Dashboard"}
+            </span>
+
+            {!loading && (
+              <ArrowRight size={16} />
+            )}
+
           </button>
+
         </form>
 
-        {/* Footer */}
-        <div
-          style={{
-            marginTop: "26px",
-            textAlign: "center",
-            fontFamily: MONO,
-            fontSize: "10px",
-            color: T.muted,
-            letterSpacing: "0.04em",
-          }}
-        >
+        {/* ==================================================
+            FOOTER
+        ================================================== */}
+
+        <div className="admin-login-footer">
           AUTHENTICATED ACCESS ONLY
         </div>
+
       </div>
+
     </div>
   );
 }

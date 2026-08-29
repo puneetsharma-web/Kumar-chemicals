@@ -1393,6 +1393,7 @@ export default function Products() {
                   fontWeight: 500,
                   lineHeight: 1.15,
                   marginBottom: "20px",
+                  color:"black"
                 }}
               >
                 Logistics matching your production scale.
