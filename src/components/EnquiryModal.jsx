@@ -135,7 +135,7 @@ export default function EnquiryModal({
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/enquiries",
+        "https://kumar-chemicals.onrender.com/api/enquiries",
         {
           method: "POST",
           headers: {
