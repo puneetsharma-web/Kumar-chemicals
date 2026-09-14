@@ -643,7 +643,7 @@ function Reviews() {
     <section ref={ref} className="reviews-section">
       <div className="home-container" style={reveal}>
         <div className="reviews-inner">
-          <Eyebrow>Client Appraisals</Eyebrow>
+          <Eyebrow>Client Feedbacks</Eyebrow>
 
           <div className="review-content" key={cur}>
             <p className="review-text">
