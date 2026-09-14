@@ -352,8 +352,7 @@ function Hero({ onQuote }) {
             <div className="home-stats">
               {[
                 ["24Y+", "Market Authority"],
-                ["50+", "Pure Compounds"],
-                ["50+", "Pure Compounds"],
+                ["50+", "Pure Compounds and more"],
                 ["100%", "MSDS Verified"],
               ].map(([val, lbl]) => (
                 <div className="home-stat" key={lbl}>
