@@ -12,6 +12,7 @@ import {
   Scale,
   ClipboardCheck,
   FileCheck2,
+  SlidersHorizontal,
 } from "lucide-react";
 
 import Navbar from "../components/Navbar";
@@ -1198,6 +1199,32 @@ export default function About() {
                     </div>
                   </div>
                 </GlassCard>
+
+                {/* NEW THIRD VALUE */}
+                <GlassCard
+                  className="about-value-card"
+                  style={{ background: T.white }}
+                >
+                  <div className="about-value-inner">
+                    <SlidersHorizontal
+                      className="about-value-icon"
+                      size={24}
+                    />
+
+                    <div>
+                      <h4 className="about-value-title">
+                        Customize Your Order
+                      </h4>
+
+                      <p className="about-value-description">
+                        Every requirement can be aligned to your procurement
+                        needs—from quantity and packaging preferences to purity
+                        specifications and delivery schedules—so you receive
+                        the product and order format that fits your operation.
+                      </p>
+                    </div>
+                  </div>
+                </GlassCard>
               </div>
             </div>
 
@@ -1324,7 +1351,9 @@ export default function About() {
                   To set the baseline paradigm for transparent technical
                   procurement across India, leveraging high-performance
                   technology grids to eliminate lead-time friction, variable
-                  supply gaps, and residue anomalies.
+                  supply gaps, and residue anomalies—while building trust
+                  through clear documentation, dependable communication, and
+                  consistent delivery from enquiry to final handover.
                 </p>
               </div>
             </GlassCard>
