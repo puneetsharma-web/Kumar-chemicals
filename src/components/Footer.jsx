@@ -123,7 +123,7 @@ export default function Footer() {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <Mail size={16} style={{ color: T.accent, flexShrink: 0 }} />
-                <span>desk@kumarchemicals.com</span>
+                <span>kumarchemichals@gmail.com</span>
               </div>
             </div>
           </div>
