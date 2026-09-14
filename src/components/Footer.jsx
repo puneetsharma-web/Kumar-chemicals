@@ -119,7 +119,7 @@ export default function Footer() {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <Phone size={16} style={{ color: T.accent, flexShrink: 0 }} />
-                <span>+91 99999 99999</span>
+                <span>+91 9015262110</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <Mail size={16} style={{ color: T.accent, flexShrink: 0 }} />
