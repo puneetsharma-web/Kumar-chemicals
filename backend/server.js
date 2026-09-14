@@ -31,6 +31,18 @@ const transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+
+  // IMPORTANT:
+  // Reuse SMTP connections instead of creating a new
+  // connection for every email.
+  pool: true,
+  maxConnections: 5,
+  maxMessages: 100,
+
+  // Prevent SMTP from hanging for a very long time.
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 15000,
 });
 
 // ======================================================
@@ -188,8 +200,7 @@ async function sendCustomerConfirmation(enquiry) {
   const info = await transporter.sendMail({
     from: process.env.MAIL_FROM,
 
-    // IMPORTANT:
-    // This is the customer's email.
+    // Customer email
     to: email,
 
     subject: "Thank You for Contacting Kumar Chemicals",
@@ -297,7 +308,6 @@ ${process.env.SMTP_USER}
 
           </div>
 
-
           <!-- BODY -->
 
           <div style="padding:34px;">
@@ -329,7 +339,6 @@ ${process.env.SMTP_USER}
               get back to you shortly.
             </p>
 
-
             <!-- DETAILS CARD -->
 
             <div
@@ -353,7 +362,6 @@ ${process.env.SMTP_USER}
               >
                 Your Enquiry Details
               </div>
-
 
               <table
                 style="
@@ -385,7 +393,6 @@ ${process.env.SMTP_USER}
                   </td>
                 </tr>
 
-
                 <tr>
                   <td
                     style="
@@ -405,7 +412,6 @@ ${process.env.SMTP_USER}
                     ${enquiry_type || "General Enquiry"}
                   </td>
                 </tr>
-
 
                 <tr>
                   <td
@@ -428,7 +434,6 @@ ${process.env.SMTP_USER}
                   </td>
                 </tr>
 
-
                 <tr>
                   <td
                     style="
@@ -449,7 +454,6 @@ ${process.env.SMTP_USER}
                   </td>
                 </tr>
 
-
                 <tr>
                   <td
                     style="
@@ -469,7 +473,6 @@ ${process.env.SMTP_USER}
                     ${delivery_location || "Not specified"}
                   </td>
                 </tr>
-
 
                 <tr>
                   <td
@@ -494,7 +497,6 @@ ${process.env.SMTP_USER}
               </table>
 
             </div>
-
 
             <!-- MESSAGE -->
 
@@ -535,7 +537,6 @@ ${process.env.SMTP_USER}
                 : ""
             }
 
-
             <!-- NEXT STEP -->
 
             <div
@@ -572,7 +573,6 @@ ${process.env.SMTP_USER}
 
             </div>
 
-
             <!-- SIGNATURE -->
 
             <p
@@ -594,7 +594,6 @@ ${process.env.SMTP_USER}
             </p>
 
           </div>
-
 
           <!-- FOOTER -->
 
@@ -661,11 +660,14 @@ async function sendInternalNotification(enquiry) {
     // This goes to Kumar Chemicals
     to: process.env.SMTP_USER,
 
-    // When you click Reply in Gmail,
-    // it replies directly to the customer.
+    // Reply directly to customer
     replyTo: email,
 
     subject: `New Enquiry — ${product} — ${company}`,
+
+    // ==================================================
+    // PLAIN TEXT VERSION
+    // ==================================================
 
     text: `
 NEW CUSTOMER ENQUIRY
@@ -701,6 +703,10 @@ This enquiry was submitted through the Kumar Chemicals website.
 Regards,
 Kumar Chemicals Website
     `.trim(),
+
+    // ==================================================
+    // HTML VERSION
+    // ==================================================
 
     html: `
       <div
@@ -766,7 +772,6 @@ Kumar Chemicals Website
 
           </div>
 
-
           <!-- CUSTOMER INFORMATION -->
 
           <div style="padding:30px 32px 10px;">
@@ -783,7 +788,6 @@ Kumar Chemicals Website
             >
               Customer Information
             </div>
-
 
             <table
               style="
@@ -815,7 +819,6 @@ Kumar Chemicals Website
                 </td>
               </tr>
 
-
               <tr>
                 <td
                   style="
@@ -836,7 +839,6 @@ Kumar Chemicals Website
                   ${company}
                 </td>
               </tr>
-
 
               <tr>
                 <td
@@ -863,7 +865,6 @@ Kumar Chemicals Website
                 </td>
               </tr>
 
-
               <tr>
                 <td
                   style="
@@ -889,7 +890,6 @@ Kumar Chemicals Website
                 </td>
               </tr>
 
-
               <tr>
                 <td
                   style="
@@ -914,7 +914,6 @@ Kumar Chemicals Website
 
           </div>
 
-
           <!-- REQUIREMENT DETAILS -->
 
           <div style="padding:20px 32px 10px;">
@@ -931,7 +930,6 @@ Kumar Chemicals Website
             >
               Requirement Details
             </div>
-
 
             <table
               style="
@@ -963,7 +961,6 @@ Kumar Chemicals Website
                 </td>
               </tr>
 
-
               <tr>
                 <td
                   style="
@@ -985,7 +982,6 @@ Kumar Chemicals Website
                 </td>
               </tr>
 
-
               <tr>
                 <td
                   style="
@@ -1005,7 +1001,6 @@ Kumar Chemicals Website
                   ${delivery_location || "Not specified"}
                 </td>
               </tr>
-
 
               <tr>
                 <td
@@ -1031,7 +1026,6 @@ Kumar Chemicals Website
 
           </div>
 
-
           <!-- MESSAGE -->
 
           <div style="padding:20px 32px 30px;">
@@ -1049,7 +1043,6 @@ Kumar Chemicals Website
               Additional Requirements
             </div>
 
-
             <div
               style="
                 padding:18px;
@@ -1066,7 +1059,6 @@ Kumar Chemicals Website
             </div>
 
           </div>
-
 
           <!-- FOOTER -->
 
@@ -1191,49 +1183,62 @@ app.post("/api/enquiries", async (req, res) => {
     );
 
     // ==================================================
-    // SEND CUSTOMER CONFIRMATION EMAIL
+    // IMPORTANT PERFORMANCE FIX
+    // ==================================================
+    //
+    // DO NOT wait for the emails before responding
+    // to the customer.
+    //
+    // The enquiry is already safely stored in Supabase.
+    // We can tell the website that the submission worked
+    // immediately.
+    //
+    // Emails continue in the background.
     // ==================================================
 
-    try {
-      await sendCustomerConfirmation(data);
+    // Start customer confirmation email
+    // WITHOUT awaiting it.
+    sendCustomerConfirmation(data)
+      .then(() => {
+        console.log(
+          "CUSTOMER CONFIRMATION COMPLETED:",
+          data.email
+        );
+      })
+      .catch((emailError) => {
+        console.error(
+          "CUSTOMER CONFIRMATION EMAIL ERROR:",
+          emailError
+        );
+      });
 
-      console.log(
-        "CUSTOMER CONFIRMATION SENT TO:",
-        data.email
-      );
-    } catch (emailError) {
-      console.error(
-        "CUSTOMER CONFIRMATION EMAIL ERROR:",
-        emailError
-      );
-    }
-
-    // ==================================================
-    // SEND INTERNAL NOTIFICATION EMAIL
-    // ==================================================
-
-    try {
-      await sendInternalNotification(data);
-
-      console.log(
-        "INTERNAL NOTIFICATION SENT TO:",
-        process.env.SMTP_USER
-      );
-    } catch (emailError) {
-      console.error(
-        "INTERNAL NOTIFICATION EMAIL ERROR:",
-        emailError
-      );
-    }
+    // Start internal notification email
+    // WITHOUT awaiting it.
+    sendInternalNotification(data)
+      .then(() => {
+        console.log(
+          "INTERNAL NOTIFICATION COMPLETED:",
+          process.env.SMTP_USER
+        );
+      })
+      .catch((emailError) => {
+        console.error(
+          "INTERNAL NOTIFICATION EMAIL ERROR:",
+          emailError
+        );
+      });
 
     // ==================================================
     // RESPONSE
     // ==================================================
+    //
+    // This now happens immediately after Supabase saves
+    // the enquiry.
+    // ==================================================
 
     return res.status(201).json({
       success: true,
-      message:
-        "Enquiry submitted successfully.",
+      message: "Enquiry submitted successfully.",
       enquiry: data,
     });
 
@@ -1354,6 +1359,7 @@ app.get("/api/enquiries/:id", async (req, res) => {
 app.patch("/api/enquiries/:id", async (req, res) => {
   try {
     const { id } = req.params;
+
     const {
       status,
       admin_notes,
