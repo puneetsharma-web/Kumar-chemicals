@@ -353,6 +353,7 @@ function Hero({ onQuote }) {
               {[
                 ["24Y+", "Market Authority"],
                 ["50+", "Pure Compounds"],
+                ["50+", "Pure Compounds"],
                 ["100%", "MSDS Verified"],
               ].map(([val, lbl]) => (
                 <div className="home-stat" key={lbl}>
