@@ -12,7 +12,6 @@ import {
   Scale,
   ClipboardCheck,
   FileCheck2,
-  SlidersHorizontal,
 } from "lucide-react";
 import founderImage from "../assets/founder.png";
 import Navbar from "../components/Navbar";
@@ -37,7 +36,7 @@ const T = {
 
 const SERIF = `"Cormorant Garamond", "Garamond", "Georgia", serif`;
 const SANS = `"DM Sans", "Inter", sans-serif`;
-const MONO = `"DM Mono", "Courier New", monospace";
+const MONO = `"DM Mono", "Courier New", monospace`;
 const W = "1320px";
 
 function useReveal() {
@@ -207,10 +206,6 @@ export default function About() {
           flex-shrink: 0;
         }
 
-        /* =========================
-           HERO
-        ========================= */
-
         .about-hero {
           padding: 220px 0 120px;
           background:
@@ -267,10 +262,6 @@ export default function About() {
           object-fit: cover;
           display: block;
         }
-
-        /* =========================
-           OPERATIONAL PHILOSOPHY
-        ========================= */
 
         .about-section-philosophy {
           padding: 140px 0;
@@ -339,10 +330,6 @@ export default function About() {
           line-height: 1.6;
           margin: 0;
         }
-
-        /* =========================
-           TIMELINE
-        ========================= */
 
         .about-timeline {
           display: flex;
@@ -426,10 +413,6 @@ export default function About() {
           margin: 0;
         }
 
-        /* =========================
-           FOUNDER
-        ========================= */
-
         .about-founder {
           padding: 140px 0;
           background: ${T.ivory};
@@ -500,10 +483,6 @@ export default function About() {
           font-weight: 500;
         }
 
-        /* =========================
-           MISSION / VISION / TRUST
-        ========================= */
-
         .about-mission {
           padding: 120px 0;
           background: ${T.ivory2};
@@ -511,9 +490,8 @@ export default function About() {
 
         .about-mission-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 24px;
-          align-items: stretch;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 32px;
         }
 
         .about-mission-card {
@@ -522,7 +500,6 @@ export default function About() {
           flex-direction: column;
           gap: 24px;
           background: ${T.white};
-          height: 100%;
         }
 
         .about-mission-top {
@@ -566,10 +543,6 @@ export default function About() {
           line-height: 1.8;
           margin: 0;
         }
-
-        /* =========================
-           INFRASTRUCTURE
-        ========================= */
 
         .about-infrastructure {
           padding: 140px 0;
@@ -682,10 +655,6 @@ export default function About() {
           flex-shrink: 0;
         }
 
-        /* =========================
-           COMPLIANCE
-        ========================= */
-
         .about-compliance {
           padding: 100px 0 150px;
           background: ${T.ivory2};
@@ -740,10 +709,6 @@ export default function About() {
           line-height: 1.5;
         }
 
-        /* =========================
-           TABLET
-        ========================= */
-
         @media (max-width: 1100px) {
           .about-container {
             width: min(100% - 40px, ${W});
@@ -767,10 +732,6 @@ export default function About() {
             padding: 40px;
           }
 
-          .about-mission-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-
           .about-mission-card {
             padding: 36px;
           }
@@ -783,10 +744,6 @@ export default function About() {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
-
-        /* =========================
-           SMALL TABLET
-        ========================= */
 
         @media (max-width: 900px) {
           .about-hero {
@@ -828,10 +785,6 @@ export default function About() {
             padding: 90px 0;
           }
 
-          .about-mission-grid {
-            grid-template-columns: 1fr;
-          }
-
           .about-infrastructure {
             padding: 100px 0;
           }
@@ -854,10 +807,6 @@ export default function About() {
             padding: 80px 0 100px;
           }
         }
-
-        /* =========================
-           MOBILE
-        ========================= */
 
         @media (max-width: 680px) {
           .about-container {
@@ -1103,10 +1052,6 @@ export default function About() {
           }
         }
 
-        /* =========================
-           VERY SMALL MOBILE
-        ========================= */
-
         @media (max-width: 400px) {
           .about-container {
             width: calc(100% - 24px);
@@ -1156,10 +1101,7 @@ export default function About() {
 
       <Navbar onGetQuote={() => setModal(true)} />
 
-      {/* =========================
-          HERO
-      ========================= */}
-
+      {/* HERO */}
       <section ref={hRef} className="about-hero">
         <div className="about-container" style={hRev}>
           <div className="about-hero-grid">
@@ -1168,12 +1110,7 @@ export default function About() {
 
               <h1 className="about-hero-title">
                 Securing supply grids with{" "}
-                <span
-                  style={{
-                    fontStyle: "italic",
-                    color: T.accent,
-                  }}
-                >
+                <span style={{ fontStyle: "italic", color: T.accent }}>
                   fractional precision
                 </span>
                 .
@@ -1198,10 +1135,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* =========================
-          OPERATIONAL PHILOSOPHY
-      ========================= */}
-
+      {/* PHILOSOPHY */}
       <section ref={sRef} className="about-section-philosophy">
         <div className="about-container" style={sRev}>
           <div className="about-philosophy-grid">
@@ -1220,16 +1154,12 @@ export default function About() {
               </p>
 
               <div className="about-value-list">
-                {/* VALUE 1 */}
                 <GlassCard
                   className="about-value-card"
                   style={{ background: T.white }}
                 >
                   <div className="about-value-inner">
-                    <Scale
-                      className="about-value-icon"
-                      size={24}
-                    />
+                    <Scale className="about-value-icon" size={24} />
 
                     <div>
                       <h4 className="about-value-title">
@@ -1247,16 +1177,12 @@ export default function About() {
                   </div>
                 </GlassCard>
 
-                {/* VALUE 2 */}
                 <GlassCard
                   className="about-value-card"
                   style={{ background: T.white }}
                 >
                   <div className="about-value-inner">
-                    <FlaskConical
-                      className="about-value-icon"
-                      size={24}
-                    />
+                    <FlaskConical className="about-value-icon" size={24} />
 
                     <div>
                       <h4 className="about-value-title">
@@ -1272,37 +1198,9 @@ export default function About() {
                     </div>
                   </div>
                 </GlassCard>
-
-                {/* VALUE 3 - CUSTOMIZE YOUR ORDER */}
-                <GlassCard
-                  className="about-value-card"
-                  style={{ background: T.white }}
-                >
-                  <div className="about-value-inner">
-                    <SlidersHorizontal
-                      className="about-value-icon"
-                      size={24}
-                    />
-
-                    <div>
-                      <h4 className="about-value-title">
-                        Customize Your Order
-                      </h4>
-
-                      <p className="about-value-description">
-                        Every requirement can be aligned to your procurement
-                        needs—from quantity and packaging preferences to
-                        purity specifications and delivery schedules—so you
-                        receive the product and order format that fits your
-                        operation.
-                      </p>
-                    </div>
-                  </div>
-                </GlassCard>
               </div>
             </div>
 
-            {/* TIMELINE */}
             <div className="about-timeline">
               {timeline.map((node, i) => (
                 <div className="timeline-node" key={i}>
@@ -1311,17 +1209,11 @@ export default function About() {
                   </div>
 
                   <div className="timeline-content">
-                    <span className="timeline-year">
-                      {node.year}
-                    </span>
+                    <span className="timeline-year">{node.year}</span>
 
-                    <h3 className="timeline-title">
-                      {node.title}
-                    </h3>
+                    <h3 className="timeline-title">{node.title}</h3>
 
-                    <p className="timeline-description">
-                      {node.desc}
-                    </p>
+                    <p className="timeline-description">{node.desc}</p>
                   </div>
                 </div>
               ))}
@@ -1330,10 +1222,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* =========================
-          FOUNDER
-      ========================= */}
-
+      {/* FOUNDER */}
       <section ref={fRef} className="about-founder">
         <div className="about-container" style={fRev}>
           <GlassCard className="about-founder-card">
@@ -1377,15 +1266,10 @@ export default function About() {
         </div>
       </section>
 
-      {/* =========================
-          MISSION / SOURCING VISION / TRUST
-      ========================= */}
-
+      {/* MISSION */}
       <section className="about-mission">
         <div className="about-container">
           <div className="about-mission-grid">
-
-            {/* CORPORATE MISSION */}
             <GlassCard
               className="about-mission-card"
               style={{ background: T.white }}
@@ -1416,7 +1300,6 @@ export default function About() {
               </div>
             </GlassCard>
 
-            {/* SOURCING VISION - ORIGINAL TEXT KEPT EXACTLY */}
             <GlassCard
               className="about-mission-card"
               style={{ background: T.white }}
@@ -1446,46 +1329,11 @@ export default function About() {
                 </p>
               </div>
             </GlassCard>
-
-            {/* NEW TRUST BOX */}
-            <GlassCard
-              className="about-mission-card"
-              style={{ background: T.white }}
-            >
-              <div className="about-mission-top">
-                <div className="about-mission-icon">
-                  <ShieldCheck size={24} />
-                </div>
-
-                <img
-                  className="about-mission-image"
-                  src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=300&q=80"
-                  alt="Trusted business partnership"
-                />
-              </div>
-
-              <div>
-                <h3 className="about-mission-title">
-                  Trust
-                </h3>
-
-                <p className="about-mission-description">
-                  We build long-term industrial relationships through
-                  transparent communication, verified product information,
-                  dependable fulfilment, and consistent support at every
-                  stage of the procurement journey.
-                </p>
-              </div>
-            </GlassCard>
-
           </div>
         </div>
       </section>
 
-      {/* =========================
-          INFRASTRUCTURE
-      ========================= */}
-
+      {/* INFRASTRUCTURE */}
       <section ref={iRef} className="about-infrastructure">
         <div className="about-container" style={iRev}>
           <div className="about-infra-heading">
@@ -1507,7 +1355,6 @@ export default function About() {
           </div>
 
           <div className="about-infra-grid">
-
             {/* STORAGE */}
             <div>
               <div className="infra-card">
@@ -1528,10 +1375,7 @@ export default function About() {
                     </p>
                   </div>
 
-                  <Warehouse
-                    size={26}
-                    color={T.accent}
-                  />
+                  <Warehouse size={26} color={T.accent} />
                 </div>
               </div>
 
@@ -1543,22 +1387,19 @@ export default function About() {
                   />
 
                   <span>
-                    <strong>Dedicated Containment:</strong>{" "}
-                    Stainless steel SUS316L and custom polymer-lined storage
-                    tanks for corrosive process elements.
+                    <strong>Dedicated Containment:</strong> Stainless steel
+                    SUS316L and custom polymer-lined storage tanks for
+                    corrosive process elements.
                   </span>
                 </div>
 
                 <div className="spec-item">
-                  <Flame
-                    size={16}
-                    className="spec-item-icon"
-                  />
+                  <Flame size={16} className="spec-item-icon" />
 
                   <span>
-                    <strong>HSSE Safety Controls:</strong>{" "}
-                    Full perimeter containment dikes alongside automatic
-                    specialized foam-induction suppression networks.
+                    <strong>HSSE Safety Controls:</strong> Full perimeter
+                    containment dikes alongside automatic specialized
+                    foam-induction suppression networks.
                   </span>
                 </div>
               </div>
@@ -1584,10 +1425,7 @@ export default function About() {
                     </p>
                   </div>
 
-                  <Truck
-                    size={26}
-                    color={T.accent}
-                  />
+                  <Truck size={26} color={T.accent} />
                 </div>
               </div>
 
@@ -1599,9 +1437,9 @@ export default function About() {
                   />
 
                   <span>
-                    <strong>Zero-Contamination Guarantee:</strong>{" "}
-                    Dedicated strict vessel routing schedules completely
-                    eliminate product-to-product changeover risks.
+                    <strong>Zero-Contamination Guarantee:</strong> Dedicated
+                    strict vessel routing schedules completely eliminate
+                    product-to-product changeover risks.
                   </span>
                 </div>
 
@@ -1612,22 +1450,18 @@ export default function About() {
                   />
 
                   <span>
-                    <strong>GPS Telematics Tracking:</strong>{" "}
-                    Real-time location parameters combined with thermal
-                    telemetry updates across all chemical dispatches.
+                    <strong>GPS Telematics Tracking:</strong> Real-time
+                    location parameters combined with thermal telemetry
+                    updates across all chemical dispatches.
                   </span>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* =========================
-          COMPLIANCE
-      ========================= */}
-
+      {/* COMPLIANCE */}
       <section className="about-compliance">
         <div className="about-container">
           <div className="about-compliance-heading">
@@ -1639,8 +1473,6 @@ export default function About() {
           </div>
 
           <div className="about-compliance-grid">
-
-            {/* COMPLIANCE 1 */}
             <div className="about-compliance-card">
               <Award
                 className="about-compliance-icon"
@@ -1659,7 +1491,6 @@ export default function About() {
               </div>
             </div>
 
-            {/* COMPLIANCE 2 */}
             <div className="about-compliance-card">
               <ShieldCheck
                 className="about-compliance-icon"
@@ -1679,7 +1510,6 @@ export default function About() {
               </div>
             </div>
 
-            {/* COMPLIANCE 3 */}
             <div className="about-compliance-card">
               <Building2
                 className="about-compliance-icon"
@@ -1697,14 +1527,9 @@ export default function About() {
                 </p>
               </div>
             </div>
-
           </div>
         </div>
       </section>
-
-      {/* =========================
-          FOOTER / MODAL
-      ========================= */}
 
       <Footer />
 

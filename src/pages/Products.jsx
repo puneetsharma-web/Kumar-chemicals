@@ -42,7 +42,7 @@ const T = {
 
 const SERIF = `"Cormorant Garamond", "Garamond", "Georgia", serif`;
 const SANS = `"DM Sans", "Inter", sans-serif`;
-const MONO = `"DM Mono", "Courier New", monospace";
+const MONO = `"DM Mono", "Courier New", monospace"`;
 const W = "1320px";
 
 /* ============================================================
