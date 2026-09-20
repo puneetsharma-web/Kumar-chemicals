@@ -14,7 +14,7 @@ import {
   FileCheck2,
   SlidersHorizontal,
 } from "lucide-react";
-
+import founderImage from "../assets/founder.png";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import WhatsAppButton from "../components/WhatsAppButton";
@@ -1338,10 +1338,11 @@ export default function About() {
         <div className="about-container" style={fRev}>
           <GlassCard className="about-founder-card">
             <div className="about-founder-image">
-              <img
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80"
-                alt="Kumar Chemicals Executive Leadership"
-              />
+<img
+  src={founderImage}
+  alt="Founder"
+  className="founder-image"
+/>
             </div>
 
             <div>

@@ -30,7 +30,7 @@ const CONTACT = {
   address: {
     line1: "Kotla Kalan, Near Industrial Area",
     line2: "Una, Himachal Pradesh – 174303",
-    country: "India",
+    country: "Chandigarh Industrial Area ",
   },
 
   phones: [
